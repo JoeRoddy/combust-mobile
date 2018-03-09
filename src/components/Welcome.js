@@ -9,6 +9,8 @@ import { stores } from "../.combust/init";
 import Login from "./users/Login";
 import { Divider } from "react-native-elements";
 import { codeText } from "../assets/styles/GlobalStyles";
+import Header from "./reusable/Header";
+import nav from "../helpers/NavigatorHelper";
 
 @observer
 export default class Welcome extends React.Component {
@@ -20,13 +22,14 @@ export default class Welcome extends React.Component {
   render() {
     const { firebaseConfigured, emailAuthEnabled, projectId } = welcomeStore;
     const user = userStore.user;
-    console.log("firebaseConf:", firebaseConfigured);
+    // console.log("firebaseConf:", firebaseConfigured);
     // console.log("projId:", projectId);
     // console.log("emailAuthEnabled: ", emailAuthEnabled);
     // console.log("user:", user);
 
     return (
       <View style={styles.container}>
+        <Header screen="Welcome" />
         <Divider />
         {!firebaseConfigured && (
           <View>
@@ -40,7 +43,8 @@ export default class Welcome extends React.Component {
             />
             <Text>
               then execute <Text style={codeText}>combust configure</Text> from
-              your terminal
+              your terminal, then restart the application with{" "}
+              <Text style={codeText}>npm start</Text>
             </Text>
           </View>
         )}
@@ -67,7 +71,7 @@ export default class Welcome extends React.Component {
               <Button
                 title="Register"
                 onPress={() => {
-                  this.props.navigation.navigate("Register");
+                  nav.navigate("Register");
                 }}
               />
             </View>
@@ -77,6 +81,10 @@ export default class Welcome extends React.Component {
           user && (
             <View>
               <Text>You're logged in! email: {user.email}</Text>
+              <Button
+                title="Screen 2"
+                onPress={e => nav.navigate("ScreenOne")}
+              />
             </View>
           )}
       </View>
@@ -86,9 +94,9 @@ export default class Welcome extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
+    flex: 1
+    // backgroundColor: "#fff",
+    // alignItems: "center",
+    // justifyContent: "center"
   }
 });

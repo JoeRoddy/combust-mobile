@@ -12,6 +12,8 @@ import { FormLabel, FormInput, Button, Text } from "react-native-elements";
 import Form from "../reusable/Form";
 import { observer } from "mobx-react";
 import userStore from "../../stores/UserStore";
+import nav from "../../helpers/NavigatorHelper";
+import { primary, secondary } from "../../assets/styles/GlobalStyles";
 
 const safeErrorCodes = {
   "auth/invalid-email": "Looks like your email is formatted incorrectly.",
@@ -29,29 +31,24 @@ export default class Login extends Component {
   state = {
     email: "",
     password: "",
-    loaded: true
+    loaded: true,
+    errMsg: null
   };
 
   static navigationOptions = {
     title: "Logout"
   };
 
-  componentWillMount() {}
-
-  componentDidMount() {}
-
-  login = () => {
-    const that = this;
-    const credentials = {
-      email: this.state.email.trim(),
-      password: this.state.password.trim()
-    };
+  login = formData => {
+    userStore.login(formData, (err, res) => {
+      err ? this.setState({ errMsg: err.message }) : nav.navigate("Home");
+    });
   };
 
   render() {
     return this.state.loaded ? (
       <KeyboardAvoidingView behavior="padding" style={styles.view}>
-        <Text style={styles.appName}>Your App</Text>
+        <Text style={[primary, styles.appName]}>Your App</Text>
         {false && <Text>You already have an account.</Text>}
         <Form
           style={styles.login}
@@ -62,9 +59,13 @@ export default class Login extends Component {
         />
         <Button
           raised
+          backgroundColor={secondary.color}
           title="Create an Account"
-          onPress={e => this.props.navigation.navigate("Register")}
+          onPress={e => nav.navigate("Register")}
         />
+        {this.state.errMsg && (
+          <Text style={{ color: "red" }}>{this.state.errMsg}</Text>
+        )}
       </KeyboardAvoidingView>
     ) : (
       <Text>loading...</Text>

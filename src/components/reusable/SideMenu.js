@@ -3,19 +3,29 @@ import { View, StyleSheet, Text, TextInput, Button } from "react-native";
 import { observer } from "mobx-react";
 import { List, ListItem } from "react-native-elements";
 
+import nav from "../../helpers/NavigatorHelper";
+import { primary } from "../../assets/styles/GlobalStyles";
 import userStore from "../../stores/UserStore";
 import Avatar from "./Avatar";
 
 @observer
 export default class SideMenu extends Component {
-  state = {};
-
   logout = () => {
     userStore.logout();
-    this.props.navigation.navigate("Login");
+    nav.navigate("Login");
   };
 
-  list = [
+  menuItems = [
+    {
+      title: "Screen One",
+      icon: "star",
+      onPress: () => nav.navigate("ScreenOne")
+    },
+    {
+      title: "Screen Two",
+      icon: "flag",
+      onPress: () => nav.navigate("ScreenTwo")
+    },
     {
       title: "Logout",
       icon: "subdirectory-arrow-left",
@@ -34,7 +44,7 @@ export default class SideMenu extends Component {
           </View>
         )}
         <List>
-          {this.list.map((item, i) => (
+          {this.menuItems.map((item, i) => (
             <ListItem
               key={i}
               title={item.title}
@@ -67,13 +77,13 @@ const styles = StyleSheet.create({
     width: 300
   },
   avatarRow: {
-    paddingTop: 18,
+    paddingTop: 35,
     paddingLeft: 12,
     flexDirection: "row",
     alignItems: "center"
   },
   userEmail: {
-    color: "#7B4ED1",
+    color: primary.color,
     fontWeight: "bold"
   }
 });

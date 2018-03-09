@@ -1,7 +1,9 @@
 import { NavigationActions } from "react-navigation";
 import { NavigationParams, NavigationRoute } from "react-navigation";
 
+const initialRoute = "Home";
 let _container; // eslint-disable-line
+let _history = [initialRoute];
 
 function setContainer(container) {
   _container = container;
@@ -22,7 +24,10 @@ function reset(routeName, params) {
   );
 }
 
-function navigate(routeName, params) {
+function navigate(routeName, params, hideFromHistory) {
+  console.log("navigate:", routeName);
+
+  !hideFromHistory && _history.push(routeName);
   _container.dispatch(
     NavigationActions.navigate({
       type: "Navigation/NAVIGATE",
@@ -47,15 +52,24 @@ function navigateDeep(actions) {
   );
 }
 
+function openDrawer() {
+  navigate("DrawerOpen", null, true);
+}
+
 function getCurrentRoute() {
-  if (!_container || !_container.state.nav) {
-    return null;
+  return _history.length > 0 ? _history[_history.length - 1] : null;
+}
+
+function goBack() {
+  if (_history.length < 1) {
+    navigate("Home");
+  } else if (_history.length === 1) {
+    _history.pop();
+    navigate("Home");
+  } else {
+    _history.pop();
+    navigate(_history.pop());
   }
-
-  let mainRoute =
-    _container.state.nav.routes[_container.state.nav.index] || null;
-
-  return mainRoute ? mainRoute.routes[mainRoute.index].key : null;
 }
 
 export default {
@@ -63,5 +77,8 @@ export default {
   navigateDeep,
   navigate,
   reset,
-  getCurrentRoute
+  getCurrentRoute,
+  goBack,
+  initialRoute,
+  openDrawer
 };

@@ -13,6 +13,8 @@ import { observer } from "mobx-react";
 
 import userStore from "../../stores/UserStore";
 import Form from "../reusable/Form";
+import nav from "../../helpers/NavigatorHelper";
+import { primary, secondary } from "../../assets/styles/GlobalStyles";
 
 const fields = {
   //legal data types: string, text, number, boolean, image
@@ -28,7 +30,7 @@ export default class Register extends Component {
 
   componentDidUpdate(nextProps) {
     if (userStore.user) {
-      this.props.history.push("/");
+      nav.navigate("Home");
     }
   }
 
@@ -37,7 +39,7 @@ export default class Register extends Component {
       if (err) {
         this.setState({ errMessage: err.message });
       } else {
-        this.props.history.push("/");
+        nav.navigate("Home");
       }
     });
   };
@@ -47,7 +49,7 @@ export default class Register extends Component {
 
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.view}>
-        <Text style={styles.appName}>Your App</Text>
+        <Text style={[primary, [styles.appName]]}>Your App</Text>
         {user && <Text>You already have an account.</Text>}
         <Form
           style={styles.regForm}
@@ -59,10 +61,10 @@ export default class Register extends Component {
         <Button
           title="Login instead"
           raised
+          backgroundColor={secondary.color}
           //   buttonStyle={{ marginTop: 10 }}
-          onPress={e => this.props.navigation.navigate("Login")}
+          onPress={e => nav.navigate("Login")}
         />
-
         {this.state.errMessage && (
           <Text style={{ color: "red", marginTop: 10 }}>
             {this.state.errMessage}

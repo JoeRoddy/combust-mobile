@@ -4,6 +4,7 @@ import { FormInput, Text, Button } from "react-native-elements";
 
 import { firebaseConfig } from "../../.combust/config";
 import { uploadDocument } from "../../db/FileDb";
+import { primary, secondary } from "../../assets/styles/GlobalStyles";
 
 export default class Form extends Component {
   state = {};
@@ -85,7 +86,7 @@ export default class Form extends Component {
     return (
       <View style={style}>
         {title && (
-          <Text h4 style={{ textAlign: "left", marginLeft: 20 }}>
+          <Text h4 style={[secondary, styles.formLabel]}>
             {title}
           </Text>
         )}
@@ -102,7 +103,7 @@ export default class Form extends Component {
             );
           })}
         <Button
-          backgroundColor="black"
+          backgroundColor={primary.color}
           raised
           title={submitText || "Submit"}
           onPress={this.submitForm}
@@ -116,6 +117,13 @@ export default class Form extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  formLabel: {
+    textAlign: "left",
+    marginLeft: 20
+  }
+});
 
 const camelCase = str => {
   if (str.includes(" ")) {

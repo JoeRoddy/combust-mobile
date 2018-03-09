@@ -3,7 +3,7 @@ import firebase from "firebase";
 
 import { firebaseConfig } from "./src/.combust/config";
 import { initializeStores } from "./src/.combust/init";
-import NavHelper from "./src/helpers/NavigatorHelper";
+import nav from "./src/helpers/NavigatorHelper";
 import Routes from "./src/components/Routes";
 
 console.ignoredYellowBox = ["Setting a timer"]; // swallow react native + firebase warning
@@ -17,7 +17,7 @@ export default class App extends React.Component {
     return (
       <Routes
         ref={navigatorRef => {
-          NavHelper.setContainer(navigatorRef);
+          nav.setContainer(navigatorRef);
         }}
       />
     );
