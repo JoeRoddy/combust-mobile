@@ -9,7 +9,6 @@ import { stores } from "../.combust/init";
 import Login from "./users/Login";
 import { Divider } from "react-native-elements";
 import { codeText } from "../assets/styles/GlobalStyles";
-import NavigatorHelper from "../helpers/NavigatorHelper";
 
 @observer
 export default class Welcome extends React.Component {
@@ -21,10 +20,10 @@ export default class Welcome extends React.Component {
   render() {
     const { firebaseConfigured, emailAuthEnabled, projectId } = welcomeStore;
     const user = userStore.user;
-    // console.log("firebaseConf:", firebaseConfigured);
+    console.log("firebaseConf:", firebaseConfigured);
     // console.log("projId:", projectId);
     // console.log("emailAuthEnabled: ", emailAuthEnabled);
-    console.log("user:", user);
+    // console.log("user:", user);
 
     return (
       <View style={styles.container}>

@@ -6,9 +6,8 @@ export const stores = {
 };
 
 export function initializeStores() {
-  if (!firebaseConfig) {
-    throw "Firebase must be configured before initializing Combust stores";
-    return;
+  if (!firebaseConfig || !firebaseConfig.projectId) {
+    return; //Firebase must be configured before initializing Combust stores
   }
 
   for (let storeName in stores) {

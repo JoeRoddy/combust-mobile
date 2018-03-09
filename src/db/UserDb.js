@@ -47,7 +47,6 @@ class UserDb {
   listenToCurrentUser(callback) {
     const db = firebase.database();
     firebase.auth().onAuthStateChanged(userAuth => {
-      console.log("authStateChange, user:", userAuth);
       if (userAuth) {
         const userRef = db.ref("users/publicInfo/" + userAuth.uid);
         userRef.once("value").then(snap => {
