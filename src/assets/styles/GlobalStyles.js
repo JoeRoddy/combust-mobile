@@ -13,3 +13,7 @@ export const primary = {
 export const secondary = {
   color: secondaryColor
 };
+
+export const screenBody = {
+  padding: 10
+};

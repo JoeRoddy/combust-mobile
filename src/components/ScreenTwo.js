@@ -9,7 +9,7 @@ export default class ScreenTwo extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header screen="Screen 2" />
+        <Header title="Screen 2" />
         <Text>Example screen 2 content</Text>
       </View>
     );

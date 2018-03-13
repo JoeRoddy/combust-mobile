@@ -1,15 +1,12 @@
 import { AsyncStorage } from "react-native";
 
 export const getItem = (key, callback) => {
-  console.log("getItem called w/key:", key);
-
   try {
     const value = AsyncStorage.getItem(key, (err, val) => {
-      console.log("got data:", val);
       callback(null, val !== null ? JSON.parse(val) : null);
     });
   } catch (error) {
-    console.log("Error retrieving data");
+    console.error("Error retrieving data");
   }
 };
 
@@ -18,6 +15,6 @@ export const storeItem = (key, value) => {
   try {
     AsyncStorage.setItem(key, data);
   } catch (error) {
-    console.log("Error saving data");
+    console.error("Error saving data");
   }
 };

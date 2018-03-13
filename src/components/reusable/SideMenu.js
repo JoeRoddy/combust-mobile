@@ -25,16 +25,31 @@ export default class SideMenu extends Component {
       title: "Screen Two",
       icon: "flag",
       onPress: () => nav.navigate("ScreenTwo")
-    },
-    {
-      title: "Logout",
-      icon: "subdirectory-arrow-left",
-      onPress: this.logout
     }
   ];
 
   render() {
     const user = userStore.user;
+    let itemsToRender = this.menuItems.slice(0);
+    if (user) {
+      itemsToRender.unshift({
+        title: "My Profile",
+        icon: "account-circle",
+        onPress: () => nav.navigate("Profile", { userId: user.id })
+      });
+      itemsToRender.push({
+        title: "Logout",
+        icon: "subdirectory-arrow-left",
+        onPress: this.logout
+      });
+    } else {
+      itemsToRender.push({
+        title: "Login",
+        icon: "account-circle",
+        onPress: () => nav.navigate("Login")
+      });
+    }
+
     return (
       <View>
         {user && (
@@ -44,7 +59,7 @@ export default class SideMenu extends Component {
           </View>
         )}
         <List>
-          {this.menuItems.map((item, i) => (
+          {itemsToRender.map((item, i) => (
             <ListItem
               key={i}
               title={item.title}

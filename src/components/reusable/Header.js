@@ -1,20 +1,10 @@
 import React, { Component } from "react";
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  BackHandler,
-  TouchableOpacity,
-  Dimensions
-} from "react-native";
-
-import { primary } from "../../assets/styles/GlobalStyles";
+import { StyleSheet, Text, View, BackHandler } from "react-native";
 import { Icon, Button, Header as RneHeader } from "react-native-elements";
 import { observer } from "mobx-react";
 
+import { primary } from "../../assets/styles/GlobalStyles";
 import nav from "../../helpers/NavigatorHelper";
-const statusBarProps = { barStyle: "light-content" };
 
 @observer
 export default class Header extends Component {
@@ -47,7 +37,10 @@ export default class Header extends Component {
 
   render() {
     const cur = nav.getCurrentRoute();
-    console.log("route:", cur);
+    const routeName = cur && cur.routeName;
+
+    // console.log("route:", cur);
+    // console.log("name:", routeName);
 
     return (
       <View style={styles.container}>
@@ -55,10 +48,10 @@ export default class Header extends Component {
           this.props.renderNav()
         ) : (
           <RneHeader
-            statusBarProps={statusBarProps}
+            statusBarProps={{ barStyle: "light-content" }}
             leftComponent={
-              cur === "Home" ? (
-                <Icon name="menu" color="white" onPress={nav.openDrawer} />
+              routeName === "Home" || !routeName ? (
+                <Icon name="menu" color="white" onPress={nav.openSideMenu} />
               ) : (
                 <Icon
                   name="arrow-back"
@@ -69,7 +62,7 @@ export default class Header extends Component {
               )
             }
             centerComponent={{
-              text: this.props.screen,
+              text: this.props.title,
               style: {
                 color: "white",
                 fontSize: 22,

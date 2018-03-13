@@ -3,11 +3,9 @@ import { StyleSheet, Text, View, Linking } from "react-native";
 import { Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
+import { stores } from "../.combust/init";
 import welcomeStore from "../stores/WelcomeStore";
 import userStore from "../stores/UserStore";
-import { stores } from "../.combust/init";
-import Login from "./users/Login";
-import { Divider } from "react-native-elements";
 import { codeText } from "../assets/styles/GlobalStyles";
 import Header from "./reusable/Header";
 import nav from "../helpers/NavigatorHelper";
@@ -22,15 +20,10 @@ export default class Welcome extends React.Component {
   render() {
     const { firebaseConfigured, emailAuthEnabled, projectId } = welcomeStore;
     const user = userStore.user;
-    // console.log("firebaseConf:", firebaseConfigured);
-    // console.log("projId:", projectId);
-    // console.log("emailAuthEnabled: ", emailAuthEnabled);
-    // console.log("user:", user);
 
     return (
       <View style={styles.container}>
-        <Header screen="Welcome" />
-        <Divider />
+        <Header title="Welcome" />
         {!firebaseConfigured && (
           <View>
             <Text>Welcome to your combust app!</Text>
@@ -82,8 +75,8 @@ export default class Welcome extends React.Component {
             <View>
               <Text>You're logged in! email: {user.email}</Text>
               <Button
-                title="Screen 2"
-                onPress={e => nav.navigate("ScreenOne")}
+                title="Go to Screen 1"
+                onPress={() => nav.navigate("ScreenOne")}
               />
             </View>
           )}
@@ -95,8 +88,5 @@ export default class Welcome extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-    // backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: "center"
   }
 });

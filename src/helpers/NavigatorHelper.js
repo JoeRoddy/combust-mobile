@@ -3,31 +3,14 @@ import { NavigationParams, NavigationRoute } from "react-navigation";
 
 const initialRoute = "Home";
 let _container; // eslint-disable-line
-let _history = [initialRoute];
+let _history = [{ routeName: initialRoute, params: null }];
 
 function setContainer(container) {
   _container = container;
 }
 
-function reset(routeName, params) {
-  _container.dispatch(
-    NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({
-          type: "Navigation/NAVIGATE",
-          routeName,
-          params
-        })
-      ]
-    })
-  );
-}
-
 function navigate(routeName, params, hideFromHistory) {
-  console.log("navigate:", routeName);
-
-  !hideFromHistory && _history.push(routeName);
+  _history.push({ routeName: routeName, params: params || null });
   _container.dispatch(
     NavigationActions.navigate({
       type: "Navigation/NAVIGATE",
@@ -37,23 +20,14 @@ function navigate(routeName, params, hideFromHistory) {
   );
 }
 
-function navigateDeep(actions) {
+function openSideMenu() {
   _container.dispatch(
-    actions.reduceRight(
-      (prevAction, action) =>
-        NavigationActions.navigate({
-          type: "Navigation/NAVIGATE",
-          routeName: action.routeName,
-          params: action.params,
-          action: prevAction
-        }),
-      undefined
-    )
+    NavigationActions.navigate({
+      type: "Navigation/NAVIGATE",
+      routeName: "DrawerOpen",
+      params: null
+    })
   );
-}
-
-function openDrawer() {
-  navigate("DrawerOpen", null, true);
 }
 
 function getCurrentRoute() {
@@ -68,17 +42,15 @@ function goBack() {
     navigate("Home");
   } else {
     _history.pop();
-    navigate(_history.pop());
+    navigate(_history.pop().routeName);
   }
 }
 
 export default {
   setContainer,
-  navigateDeep,
   navigate,
-  reset,
   getCurrentRoute,
   goBack,
   initialRoute,
-  openDrawer
+  openSideMenu
 };
