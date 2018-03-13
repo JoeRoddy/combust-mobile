@@ -8,16 +8,18 @@ import Header from "./reusable/Header";
 export default class ScreenTwo extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <Header title="Screen 2" />
-        <Text>Example screen 2 content</Text>
+        <View style={styles.screenContent}>
+          <Text>Example screen 2 content</Text>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+  screenContent: {
+    padding: 10
   }
 });

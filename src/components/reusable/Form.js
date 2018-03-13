@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Linking, View } from "react-native";
+import { StyleSheet, Linking, View, Keyboard } from "react-native";
 import { FormInput, Text, Button } from "react-native-elements";
 
 import { firebaseConfig } from "../../.combust/config";
@@ -10,6 +10,7 @@ export default class Form extends Component {
   state = {};
 
   submitForm = e => {
+    Keyboard.dismiss();
     e.preventDefault();
     const { fields, onSubmit } = this.props;
     let formData = {};
@@ -99,6 +100,7 @@ export default class Form extends Component {
                 placeholder={field}
                 onChangeText={newVal => this.setState({ [field]: newVal })}
                 secureTextEntry={field.toLowerCase() === "password"}
+                onSubmitEditing={Keyboard.dismiss}
               />
             );
           })}

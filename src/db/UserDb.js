@@ -24,7 +24,6 @@ class UserDb {
       })
       .catch(error => {
         callback(error);
-        console.error(error.message);
       });
   }
 

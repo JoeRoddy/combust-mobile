@@ -5,7 +5,7 @@ import { Icon } from "react-native-elements";
 import { observer, inject } from "mobx-react";
 
 const Avatar = ({ src, size, onPress, styles }) => {
-  size = size || 10;
+  size = size || 40;
 
   const style = {
     height: size,

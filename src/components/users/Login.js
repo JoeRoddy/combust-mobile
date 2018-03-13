@@ -40,6 +40,12 @@ export default class Login extends Component {
   };
 
   login = formData => {
+    if (!formData || !formData.email || !formData.password) {
+      return this.setState({
+        errMsg: "Ensure you've provided an email and a password"
+      });
+    }
+
     userStore.login(formData, (err, res) => {
       err ? this.setState({ errMsg: err.message }) : nav.navigate("Home");
     });
@@ -64,7 +70,9 @@ export default class Login extends Component {
           onPress={e => nav.navigate("Register")}
         />
         {this.state.errMsg && (
-          <Text style={{ color: "red" }}>{this.state.errMsg}</Text>
+          <Text style={{ color: "red", marginTop: 10, textAlign: "center" }}>
+            {this.state.errMsg}
+          </Text>
         )}
       </KeyboardAvoidingView>
     ) : (

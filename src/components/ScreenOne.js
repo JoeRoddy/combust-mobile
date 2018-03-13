@@ -10,20 +10,22 @@ import Header from "./reusable/Header";
 export default class ScreenOne extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <Header title="Screen 1" />
-        <Text>Example screen 1 content</Text>
-        <Button
-          title="Go to Screen 2"
-          onPress={() => nav.navigate("ScreenTwo")}
-        />
+        <View style={styles.screenContent}>
+          <Text>Example screen 1 content</Text>
+          <Button
+            title="Go to Screen 2"
+            onPress={() => nav.navigate("ScreenTwo")}
+          />
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+  screenContent: {
+    padding: 10
   }
 });

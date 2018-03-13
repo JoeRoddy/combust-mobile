@@ -22,71 +22,88 @@ export default class Welcome extends React.Component {
     const user = userStore.user;
 
     return (
-      <View style={styles.container}>
+      <View>
         <Header title="Welcome" />
-        {!firebaseConfigured && (
-          <View>
-            <Text>Welcome to your combust app!</Text>
-            <Text>To get started:</Text>
-            <Button
-              title="Create a new Firebase project"
-              onPress={() => {
-                Linking.openURL("https://console.firebase.google.com");
-              }}
-            />
-            <Text>
-              then execute <Text style={codeText}>combust configure</Text> from
-              your terminal, then restart the application with{" "}
-              <Text style={codeText}>npm start</Text>
-            </Text>
-          </View>
-        )}
-        {firebaseConfigured &&
-          !emailAuthEnabled && (
-            <View>
-              <Text>Awesome, looks like firebase is hooked up.</Text>
-              <Text>Next, enable email/password authentication</Text>
-              <Button
-                title="Enable Email Auth"
-                onPress={() => {
-                  Linking.openURL(
-                    `https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers`
-                  );
-                }}
-              />
-            </View>
-          )}
-        {firebaseConfigured &&
-          emailAuthEnabled &&
-          !user && (
-            <View>
-              <Text>Awesome, now create your first user</Text>
-              <Button
-                title="Register"
-                onPress={() => {
-                  nav.navigate("Register");
-                }}
-              />
-            </View>
-          )}
-        {firebaseConfigured &&
-          emailAuthEnabled &&
-          user && (
-            <View>
-              <Text>You're logged in! email: {user.email}</Text>
-              <Button
-                title="Go to Screen 1"
-                onPress={() => nav.navigate("ScreenOne")}
-              />
-            </View>
-          )}
+        <View style={styles.screenContent}>
+          {!firebaseConfigured && <ConfigureFirebase />}
+          {firebaseConfigured && !emailAuthEnabled && <EnableAuthentication />}
+          {firebaseConfigured &&
+            emailAuthEnabled &&
+            !user && <CreateInitialUser />}
+          {firebaseConfigured &&
+            emailAuthEnabled &&
+            user && <ExecuteGenerate user={user} />}
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+  screenContent: {
+    padding: 10
   }
 });
+
+const ConfigureFirebase = () => {
+  return (
+    <View>
+      <Text>Welcome to your combust app!</Text>
+      <Text>To get started:</Text>
+      <Button
+        title="Create a new Firebase project"
+        onPress={() => {
+          Linking.openURL("https://console.firebase.google.com");
+        }}
+      />
+      <Text>
+        then execute <Text style={codeText}>combust configure</Text> from your
+        terminal, then restart the application with{" "}
+        <Text style={codeText}>npm start</Text>
+      </Text>
+    </View>
+  );
+};
+
+const EnableAuthentication = () => {
+  return (
+    <View>
+      <Text>Awesome, looks like firebase is hooked up.</Text>
+      <Text>Next, enable email/password authentication</Text>
+      <Button
+        title="Enable Email Auth"
+        onPress={() => {
+          Linking.openURL(
+            `https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers`
+          );
+        }}
+      />
+    </View>
+  );
+};
+
+const CreateInitialUser = () => {
+  return (
+    <View>
+      <Text>Awesome, now create your first user</Text>
+      <Button
+        title="Register"
+        onPress={() => {
+          nav.navigate("Register");
+        }}
+      />
+    </View>
+  );
+};
+
+const ExecuteGenerate = ({ user }) => {
+  return (
+    <View>
+      <Text>You're logged in! email: {user.email}</Text>
+      <Button
+        title="Go to Screen 1"
+        onPress={() => nav.navigate("ScreenOne")}
+      />
+    </View>
+  );
+};

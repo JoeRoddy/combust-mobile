@@ -11,10 +11,11 @@ import {
 import { Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
-import Header from "../reusable/Header";
 import userStore from "../../stores/UserStore";
-import Form from "../reusable/Form";
 import nav from "../../helpers/NavigatorHelper";
+import Header from "../reusable/Header";
+import Form from "../reusable/Form";
+import Avatar from "../reusable/Avatar";
 import { primary, secondary } from "../../assets/styles/GlobalStyles";
 
 const fields = {
@@ -26,19 +27,24 @@ const fields = {
 @observer
 export default class Profile extends Component {
   render() {
-    const user = userStore.user;
+    const routeInfo = nav.getCurrentRoute();
+    const userId = routeInfo && routeInfo.params && routeInfo.params.userId;
+    const user = userStore.getUserById(userId);
 
     return (
-      <View style={styles.container}>
+      <View>
         <Header title="Profile" />
-        <Text>profile content</Text>
+        <View style={styles.screenContent}>
+          <Avatar src={user.iconUrl} />
+          <Text>email: {user.email}</Text>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  view: {
-    flex: 1
+  screenContent: {
+    padding: 10
   }
 });

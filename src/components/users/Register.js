@@ -66,7 +66,7 @@ export default class Register extends Component {
           onPress={e => nav.navigate("Login")}
         />
         {this.state.errMessage && (
-          <Text style={{ color: "red", marginTop: 10 }}>
+          <Text style={{ color: "red", marginTop: 10, textAlign: "center" }}>
             {this.state.errMessage}
           </Text>
         )}
