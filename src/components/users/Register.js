@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  AsyncStorage,
-  TouchableOpacity,
-  Text,
-  KeyboardAvoidingView
-} from "react-native";
+import { View, StyleSheet, Text, KeyboardAvoidingView } from "react-native";
 import { Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
@@ -62,7 +54,6 @@ export default class Register extends Component {
           title="Login instead"
           raised
           backgroundColor={secondary.color}
-          //   buttonStyle={{ marginTop: 10 }}
           onPress={e => nav.navigate("Login")}
         />
         {this.state.errMessage && (

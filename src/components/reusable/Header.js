@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, BackHandler } from "react-native";
-import { Icon, Button, Header as RneHeader } from "react-native-elements";
+import { StyleSheet, View, BackHandler } from "react-native";
+import { Icon, Header as RneHeader } from "react-native-elements";
 import { observer } from "mobx-react";
 
 import { primary } from "../../assets/styles/GlobalStyles";
@@ -38,9 +38,6 @@ export default class Header extends Component {
   render() {
     const cur = nav.getCurrentRoute();
     const routeName = cur && cur.routeName;
-
-    // console.log("route:", cur);
-    // console.log("name:", routeName);
 
     return (
       <View style={styles.container}>

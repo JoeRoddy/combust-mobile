@@ -1,18 +1,11 @@
 import React, { Component } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  AsyncStorage,
-  TouchableOpacity,
-  KeyboardAvoidingView
-} from "react-native";
-import { FormLabel, FormInput, Button, Text } from "react-native-elements";
-// import Loading from "./Loading";
-import Form from "../reusable/Form";
+import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
+import { Button, Text } from "react-native-elements";
 import { observer } from "mobx-react";
+
 import userStore from "../../stores/UserStore";
 import nav from "../../helpers/NavigatorHelper";
+import Form from "../reusable/Form";
 import { primary, secondary } from "../../assets/styles/GlobalStyles";
 
 const safeErrorCodes = {

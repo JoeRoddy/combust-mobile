@@ -1,28 +1,12 @@
 import React, { Component } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  AsyncStorage,
-  TouchableOpacity,
-  Text,
-  KeyboardAvoidingView
-} from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
 import userStore from "../../stores/UserStore";
 import nav from "../../helpers/NavigatorHelper";
 import Header from "../reusable/Header";
-import Form from "../reusable/Form";
 import Avatar from "../reusable/Avatar";
-import { primary, secondary } from "../../assets/styles/GlobalStyles";
-
-const fields = {
-  //legal data types: string, text, number, boolean, image
-  Email: "string",
-  Password: "string"
-};
 
 @observer
 export default class Profile extends Component {
