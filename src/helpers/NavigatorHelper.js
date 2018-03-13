@@ -11,23 +11,16 @@ function setContainer(container) {
 
 function navigate(routeName, params, hideFromHistory) {
   _history.push({ routeName: routeName, params: params || null });
-  _container.dispatch(
-    NavigationActions.navigate({
-      type: "Navigation/NAVIGATE",
-      routeName,
-      params
-    })
-  );
+  _dispatchNavigation(routeName, params);
 }
 
 function openSideMenu() {
-  _container.dispatch(
-    NavigationActions.navigate({
-      type: "Navigation/NAVIGATE",
-      routeName: "DrawerOpen",
-      params: null
-    })
-  );
+  //ghetto fix to solve double taps, see:
+  //https://github.com/react-navigation/react-navigation/issues/1960
+  _dispatchNavigation("DrawerClose");
+  setTimeout(() => {
+    _dispatchNavigation("DrawerOpen");
+  }, 0);
 }
 
 function getCurrentRoute() {
@@ -54,3 +47,13 @@ export default {
   initialRoute,
   openSideMenu
 };
+
+function _dispatchNavigation(routeName, params) {
+  _container.dispatch(
+    NavigationActions.navigate({
+      type: "Navigation/NAVIGATE",
+      routeName,
+      params
+    })
+  );
+}
