@@ -15,7 +15,7 @@ export default class SideMenu extends Component {
     nav.navigate("Login");
   };
 
-  menuItems = [
+  userAgnosticMenuItems = [
     {
       title: "Screen One",
       icon: "star",
@@ -28,27 +28,36 @@ export default class SideMenu extends Component {
     }
   ];
 
-  render() {
-    const user = userStore.user;
-    let itemsToRender = this.menuItems.slice(0);
+  getMenuItems = user => {
+    let itemsToRender = this.userAgnosticMenuItems.slice(0);
     if (user) {
-      itemsToRender.unshift({
-        title: "My Profile",
-        icon: "account-circle",
-        onPress: () => nav.navigate("Profile", { userId: user.id })
-      });
-      itemsToRender.push({
-        title: "Logout",
-        icon: "subdirectory-arrow-left",
-        onPress: this.logout
-      });
+      let userMenuItems = getCombustMenuItems(user);
+      userMenuItems = userMenuItems.concat([
+        {
+          title: "My Profile",
+          icon: "account-circle",
+          onPress: () => nav.navigate("Profile", { userId: user.id })
+        },
+        {
+          title: "Logout",
+          icon: "subdirectory-arrow-left",
+          onPress: this.logout
+        }
+      ]);
+      return itemsToRender.concat(userMenuItems);
     } else {
       itemsToRender.push({
         title: "Login",
         icon: "account-circle",
         onPress: () => nav.navigate("Login")
       });
+      return itemsToRender;
     }
+  };
+
+  render() {
+    const user = userStore.user;
+    const itemsToRender = this.getMenuItems(user);
 
     return (
       <View>
@@ -102,3 +111,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   }
 });
+
+const getCombustMenuItems = user => {
+  //combust generate hook, do not rename
+  const COMBUST_MENU_ITEMS = [];
+  return COMBUST_MENU_ITEMS;
+};

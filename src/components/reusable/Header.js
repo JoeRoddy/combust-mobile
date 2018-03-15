@@ -47,7 +47,7 @@ export default class Header extends Component {
           <RneHeader
             statusBarProps={{ barStyle: "light-content" }}
             leftComponent={
-              routeName === "Home" || !routeName ? (
+              routeName === "Home" ? (
                 <Icon name="menu" color="white" onPress={nav.openSideMenu} />
               ) : (
                 <Icon
