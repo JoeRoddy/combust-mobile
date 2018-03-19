@@ -1,10 +1,18 @@
 import React, { Component } from "react";
-import { StyleSheet, Linking, View, Keyboard } from "react-native";
+import {
+  StyleSheet,
+  Linking,
+  View,
+  Keyboard,
+  TextInput,
+  Image
+} from "react-native";
 import { FormInput, Text, Button } from "react-native-elements";
 
 import { firebaseConfig } from "../../.combust/config";
+import { successColor, secondary } from "../../assets/styles/GlobalStyles";
+import { uploadImgAndGetUrl } from "../../helpers/ImageHelper";
 import { uploadDocument } from "../../db/FileDb";
-import { primary, secondary } from "../../assets/styles/GlobalStyles";
 
 export default class Form extends Component {
   state = {};
@@ -26,39 +34,17 @@ export default class Form extends Component {
   };
 
   uploadImage = field => {
-    // const image = this.refs[field].files[0];
-    // if (!image) return;
-    // const imageErr = "Legal images include: jpegs, png";
-    // if (!["image/jpeg", "image/png"].includes(image.type)) {
-    //   return this.setState({ errMessage: imageErr });
-    // }
-    // uploadDocument(image, "images/", (err, res) => {
-    //   if (err) {
-    //     return this.setState({
-    //       errMessage:
-    //         err.code === "storage/unauthorized" ? (
-    //           "User must be logged in to upload files."
-    //         ) : (
-    //           <View>
-    //             <Button
-    //               title="Enable storage"
-    //               onPress={() => {
-    //                 Linking.openURL(
-    //                   `https://console.firebase.google.com/project/${
-    //                     firebaseConfig.projectId
-    //                   }/storage/files`
-    //                 );
-    //               }}
-    //             />
-    //             <Text>
-    //               then execute: combust configure {firebaseConfig.projectId}
-    //             </Text>
-    //           </View>
-    //         )
-    //     });
-    //   }
-    //   this.setState({ [field]: res.url });
-    // });
+    const uploadStatus = field + "_uploadStatus";
+
+    uploadImgAndGetUrl("images/", (err, res) => {
+      console.log("res:", res);
+
+      err
+        ? this.setState({ errMessage: err.message })
+        : res.status === "completed"
+          ? this.setState({ [field]: res.url, [uploadStatus]: "completed" })
+          : this.setState({ [uploadStatus]: res.status });
+    });
   };
 
   getInputValue = field => {
@@ -92,24 +78,20 @@ export default class Form extends Component {
           </Text>
         )}
         {fields &&
-          Object.keys(fields).map(field => {
-            const type = fields[field];
-            return (
-              <FormInput
-                key={field}
-                placeholder={field}
-                onChangeText={newVal => this.setState({ [field]: newVal })}
-                secureTextEntry={field.toLowerCase() === "password"}
-                onSubmitEditing={Keyboard.dismiss}
-              />
-            );
-          })}
+          Object.keys(fields).map((field, i) => (
+            <RenderInputFieldForDataType
+              key={i}
+              that={this}
+              dataType={fields[field]}
+              fieldName={field}
+            />
+          ))}
         <Button
-          backgroundColor={primary.color}
+          backgroundColor={successColor}
           raised
           title={submitText || "Submit"}
           onPress={this.submitForm}
-          buttonStyle={{ marginTop: 10, marginBottom: 10 }}
+          containerViewStyle={{ marginTop: 10, marginBottom: 10 }}
         />
         {this.props.children}
         {this.state.errMessage && (
@@ -119,6 +101,48 @@ export default class Form extends Component {
     );
   }
 }
+
+const RenderInputFieldForDataType = props => {
+  switch (props.dataType) {
+    case "image":
+      return <RenderImageInput {...props} />;
+    default:
+      return <RenderStringInput {...props} />;
+  }
+};
+
+const RenderStringInput = ({ fieldName, that }) => (
+  <FormInput
+    placeholder={fieldName}
+    onChangeText={newVal => that.setState({ [fieldName]: newVal })}
+    secureTextEntry={fieldName.toLowerCase() === "password"}
+    onSubmitEditing={Keyboard.dismiss}
+    value={that.getInputValue(fieldName)}
+  />
+);
+
+const RenderImageInput = ({ fieldName, that }) => (
+  <View>
+    <View style={{ marginLeft: 25 }}>
+      {that.state[fieldName + "_uploadStatus"] && (
+        <Text>Upload: {that.state[fieldName + "_uploadStatus"]}</Text>
+      )}
+      {that.state[fieldName] && (
+        <Image
+          style={{ height: 50, width: 50, marginTop: 20, marginBottom: 20 }}
+          source={{ uri: that.state[fieldName] }}
+        />
+      )}
+    </View>
+    <Button
+      backgroundColor={secondary.color}
+      title={`${that.state[fieldName] ? "Change" : "Upload"} ${capitalize(
+        fieldName
+      )}`}
+      onPress={() => that.uploadImage(fieldName)}
+    />
+  </View>
+);
 
 const styles = StyleSheet.create({
   formLabel: {

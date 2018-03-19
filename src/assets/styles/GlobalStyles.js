@@ -1,19 +1,23 @@
 const primaryColor = "black";
 const secondaryColor = "grey";
+const warningColor = "#f0506e";
+const successColor = "#03b75d";
 
-export const codeText = {
+const codeText = {
   fontWeight: "bold",
   color: "#f442e8"
 };
 
-export const primary = {
+const primary = {
   color: primaryColor
 };
 
-export const secondary = {
+const secondary = {
   color: secondaryColor
 };
 
-export const screenBody = {
+const screenBody = {
   padding: 10
 };
+
+export { codeText, primary, secondary, screenBody, successColor, warningColor };

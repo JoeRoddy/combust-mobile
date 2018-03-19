@@ -35,7 +35,8 @@ function goBack() {
     navigate("Home");
   } else {
     _history.pop();
-    navigate(_history.pop().routeName);
+    const route = _history.pop();
+    navigate(route.routeName, route.params);
   }
 }
 
