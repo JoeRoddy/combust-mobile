@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { observer } from "mobx-react";
 
+import { viewStyles } from "../assets/styles/AppStyles";
 import Header from "./reusable/Header";
 
 @observer
@@ -10,7 +11,7 @@ export default class ScreenTwo extends React.Component {
     return (
       <View>
         <Header title="Screen 2" />
-        <View style={styles.screenContent}>
+        <View style={viewStyles.screenContent}>
           <Text>Example screen 2 content</Text>
         </View>
       </View>
@@ -18,8 +19,4 @@ export default class ScreenTwo extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  screenContent: {
-    padding: 10
-  }
-});
+const styles = StyleSheet.create({});

@@ -3,6 +3,7 @@ import { View, StyleSheet, Text } from "react-native";
 import { Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
+import { viewStyles } from "../../assets/styles/AppStyles";
 import userStore from "../../stores/UserStore";
 import nav from "../../helpers/NavigatorHelper";
 import Header from "../reusable/Header";
@@ -18,7 +19,7 @@ export default class Profile extends Component {
     return (
       <View>
         <Header title="Profile" />
-        <View style={styles.screenContent}>
+        <View style={viewStyles.padding}>
           <Avatar src={user.iconUrl} />
           <Text>email: {user.email}</Text>
         </View>
@@ -27,8 +28,4 @@ export default class Profile extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  screenContent: {
-    padding: 10
-  }
-});
+const styles = StyleSheet.create({});

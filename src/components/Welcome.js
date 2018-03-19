@@ -3,10 +3,10 @@ import { StyleSheet, Text, View, Linking } from "react-native";
 import { Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
+import { textStyles, viewStyles } from "../assets/styles/AppStyles";
 import { stores } from "../.combust/init";
 import welcomeStore from "../stores/WelcomeStore";
 import userStore from "../stores/UserStore";
-import { codeText } from "../assets/styles/GlobalStyles";
 import Header from "./reusable/Header";
 import nav from "../helpers/NavigatorHelper";
 
@@ -24,7 +24,7 @@ export default class Welcome extends React.Component {
     return (
       <View>
         <Header title="Welcome" />
-        <View style={styles.screenContent}>
+        <View style={viewStyles.padding}>
           {!firebaseConfigured && <ConfigureFirebase />}
           {firebaseConfigured && !emailAuthEnabled && <EnableAuthentication />}
           {firebaseConfigured &&
@@ -39,11 +39,7 @@ export default class Welcome extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  screenContent: {
-    padding: 10
-  }
-});
+const styles = StyleSheet.create({});
 
 const ConfigureFirebase = () => {
   return (
@@ -57,9 +53,9 @@ const ConfigureFirebase = () => {
         }}
       />
       <Text>
-        then execute <Text style={codeText}>combust configure</Text> from your
-        terminal, then restart the application with{" "}
-        <Text style={codeText}>npm start</Text>
+        then execute <Text style={textStyles.code}>combust configure</Text> from
+        your terminal, then restart the application with{" "}
+        <Text style={textStyles.code}>npm start</Text>
       </Text>
     </View>
   );

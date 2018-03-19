@@ -4,7 +4,7 @@ import { View, StyleSheet, Text } from "react-native";
 import { List, ListItem } from "react-native-elements";
 
 import nav from "../../helpers/NavigatorHelper";
-import { primary } from "../../assets/styles/GlobalStyles";
+import { colors } from "../../assets/styles/AppStyles";
 import userStore from "../../stores/UserStore";
 import Avatar from "./Avatar";
 
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   userEmail: {
-    color: primary.color,
+    color: colors.primary,
     fontWeight: "bold"
   }
 });

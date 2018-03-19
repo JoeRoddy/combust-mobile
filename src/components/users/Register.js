@@ -3,10 +3,10 @@ import { View, StyleSheet, Text, KeyboardAvoidingView } from "react-native";
 import { Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
+import { colors } from "../../assets/styles/AppStyles";
 import userStore from "../../stores/UserStore";
 import Form from "../reusable/Form";
 import nav from "../../helpers/NavigatorHelper";
-import { primary, secondary } from "../../assets/styles/GlobalStyles";
 
 const fields = {
   //legal data types: string, text, number, boolean, image
@@ -41,7 +41,7 @@ export default class Register extends Component {
 
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.view}>
-        <Text style={[primary, [styles.appName]]}>Your App</Text>
+        <Text style={styles.appName}>Your App</Text>
         {user && <Text>You already have an account.</Text>}
         <Form
           style={styles.regForm}
@@ -53,7 +53,7 @@ export default class Register extends Component {
         <Button
           title="Login instead"
           raised
-          backgroundColor={secondary.color}
+          backgroundColor={colors.secondary}
           onPress={e => nav.navigate("Login")}
         />
         {this.state.errMessage && (
@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   appName: {
+    color: colors.primary,
     fontSize: 50,
     fontWeight: "bold",
     textAlign: "center"

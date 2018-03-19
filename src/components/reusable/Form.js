@@ -1,16 +1,9 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Linking,
-  View,
-  Keyboard,
-  TextInput,
-  Image
-} from "react-native";
+import { StyleSheet, View, Keyboard, Image } from "react-native";
 import { FormInput, Text, Button } from "react-native-elements";
 
 import { firebaseConfig } from "../../.combust/config";
-import { successColor, secondary } from "../../assets/styles/GlobalStyles";
+import { colors } from "../../assets/styles/AppStyles";
 import { uploadImgAndGetUrl } from "../../helpers/ImageHelper";
 import { uploadDocument } from "../../db/FileDb";
 
@@ -73,7 +66,7 @@ export default class Form extends Component {
     return (
       <View style={style}>
         {title && (
-          <Text h4 style={[secondary, styles.formLabel]}>
+          <Text h4 style={styles.formLabel}>
             {title}
           </Text>
         )}
@@ -87,12 +80,19 @@ export default class Form extends Component {
             />
           ))}
         <Button
-          backgroundColor={successColor}
+          backgroundColor={colors.success}
           raised
           title={submitText || "Submit"}
           onPress={this.submitForm}
           containerViewStyle={{ marginTop: 10, marginBottom: 10 }}
         />
+        {onCancel && (
+          <Button
+            title={cancelText || "Cancel"}
+            backgroundColor={colors.warning}
+            onPress={onCancel}
+          />
+        )}
         {this.props.children}
         {this.state.errMessage && (
           <Text style={{ color: "red" }}>{this.state.errMessage}</Text>
@@ -135,7 +135,7 @@ const RenderImageInput = ({ fieldName, that }) => (
       )}
     </View>
     <Button
-      backgroundColor={secondary.color}
+      backgroundColor={colors.secondary}
       title={`${that.state[fieldName] ? "Change" : "Upload"} ${capitalize(
         fieldName
       )}`}
@@ -146,6 +146,7 @@ const RenderImageInput = ({ fieldName, that }) => (
 
 const styles = StyleSheet.create({
   formLabel: {
+    color: colors.secondary,
     textAlign: "left",
     marginLeft: 20
   }

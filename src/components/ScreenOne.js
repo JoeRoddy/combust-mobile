@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
+import { viewStyles } from "../assets/styles/AppStyles";
 import nav from "../helpers/NavigatorHelper";
 import Header from "./reusable/Header";
 
@@ -12,7 +13,7 @@ export default class ScreenOne extends React.Component {
     return (
       <View>
         <Header title="Screen 1" />
-        <View style={styles.screenContent}>
+        <View style={viewStyles.padding}>
           <Text>Example screen 1 content</Text>
           <Button
             title="Go to Screen 2"
@@ -24,8 +25,4 @@ export default class ScreenOne extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  screenContent: {
-    padding: 10
-  }
-});
+const styles = StyleSheet.create({});

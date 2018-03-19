@@ -6,7 +6,7 @@ import { observer } from "mobx-react";
 import userStore from "../../stores/UserStore";
 import nav from "../../helpers/NavigatorHelper";
 import Form from "../reusable/Form";
-import { primary, secondary } from "../../assets/styles/GlobalStyles";
+import { colors } from "../../assets/styles/AppStyles";
 
 const safeErrorCodes = {
   "auth/invalid-email": "Looks like your email is formatted incorrectly.",
@@ -47,7 +47,7 @@ export default class Login extends Component {
   render() {
     return this.state.loaded ? (
       <KeyboardAvoidingView behavior="padding" style={styles.view}>
-        <Text style={[primary, styles.appName]}>Your App</Text>
+        <Text style={styles.appName}>Your App</Text>
         {false && <Text>You already have an account.</Text>}
         <Form
           style={styles.login}
@@ -58,7 +58,7 @@ export default class Login extends Component {
         />
         <Button
           raised
-          backgroundColor={secondary.color}
+          backgroundColor={colors.secondary}
           title="Create an Account"
           onPress={e => nav.navigate("Register")}
         />
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   appName: {
+    color: colors.primary,
     fontSize: 50,
     fontWeight: "bold",
     textAlign: "center"

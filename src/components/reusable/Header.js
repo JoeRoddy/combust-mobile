@@ -3,7 +3,7 @@ import { StyleSheet, View, BackHandler } from "react-native";
 import { Icon, Header as RneHeader } from "react-native-elements";
 import { observer } from "mobx-react";
 
-import { primary } from "../../assets/styles/GlobalStyles";
+import { colors } from "../../assets/styles/AppStyles";
 import nav from "../../helpers/NavigatorHelper";
 
 @observer
@@ -67,7 +67,7 @@ export default class Header extends Component {
                 paddingBottom: 7
               }
             }}
-            backgroundColor={primary.color}
+            backgroundColor={colors.primary}
             outerContainerStyles={{ height: 80 }}
           />
         )}
