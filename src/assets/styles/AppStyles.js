@@ -1,8 +1,8 @@
 export const colors = {
   primary: "black",
   secondary: "grey",
-  success: "#f0506e",
-  warning: "#03b75d"
+  success: "#03b75d",
+  warning: "#f0506e"
 };
 
 export const viewStyles = {
