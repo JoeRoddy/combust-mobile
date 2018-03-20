@@ -1,6 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View, Linking } from "react-native";
-import { Button } from "react-native-elements";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+  Image,
+  ScrollView
+} from "react-native";
+import { Card, Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
 import { textStyles, viewStyles } from "../assets/styles/AppStyles";
@@ -22,9 +30,9 @@ export default class Welcome extends React.Component {
     const user = userStore.user;
 
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <Header title="Welcome" />
-        <View style={viewStyles.padding}>
+        <View style={[viewStyles.padding, { flex: 1 }]}>
           {!firebaseConfigured && <ConfigureFirebase />}
           {firebaseConfigured && !emailAuthEnabled && <EnableAuthentication />}
           {firebaseConfigured &&
@@ -43,21 +51,42 @@ const styles = StyleSheet.create({});
 
 const ConfigureFirebase = () => {
   return (
-    <View>
-      <Text>Welcome to your combust app!</Text>
-      <Text>To get started:</Text>
-      <Button
-        title="Create a new Firebase project"
-        onPress={() => {
-          Linking.openURL("https://console.firebase.google.com");
-        }}
-      />
-      <Text>
-        then execute <Text style={textStyles.code}>combust configure</Text> from
-        your terminal, then restart the application with{" "}
-        <Text style={textStyles.code}>npm start</Text>
-      </Text>
-    </View>
+    <ScrollView>
+      <Card
+        title="1) Create a Firebase Project"
+        image={{ uri: "https://firebase.google.com/images/social.png" }}
+      >
+        <Text style={{ marginBottom: 10 }}>
+          Create a project on Firebase, it works with any Google account and
+          takes less than a minute
+        </Text>
+        <Button
+          icon={{ type: "font-awesome", name: "database" }}
+          backgroundColor="#FFA000"
+          buttonStyle={{
+            borderRadius: 0,
+            marginLeft: 0,
+            marginRight: 0,
+            marginBottom: 0
+          }}
+          onPress={() => {
+            Linking.openURL("https://console.firebase.google.com");
+          }}
+          title="Create Project"
+        />
+      </Card>
+      <Card title="2) Configure Locally">
+        <Text style={{ fontWeight: "bold" }}>From your terminal:</Text>
+
+        <Text>
+          Execute <Text style={textStyles.code}>combust configure</Text>{" "}
+        </Text>
+        <Text>
+          Restart the app with{" "}
+          <Text style={textStyles.code}>npm run {Platform.OS}</Text>
+        </Text>
+      </Card>
+    </ScrollView>
   );
 };
 
