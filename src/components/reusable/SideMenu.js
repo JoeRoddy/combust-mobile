@@ -14,11 +14,13 @@ export default (SideMenu = observer(() => {
 
   return (
     <View>
-      {user && (
+      {user ? (
         <View style={styles.avatarRow}>
           <Avatar size={40} src={user.iconUrl} styles={{ marginRight: 10 }} />
           <Text style={styles.userEmail}>{user.email}</Text>
         </View>
+      ) : (
+        <View style={{ paddingTop: 30 }} />
       )}
       <List>
         {menuItems.map((item, i) => (
@@ -37,6 +39,11 @@ export default (SideMenu = observer(() => {
 
 //will render even if user is offline
 const userAgnosticMenuItems = [
+  {
+    title: "Home",
+    icon: "home",
+    onPress: () => nav.navigate("Home")
+  },
   {
     title: "Screen One",
     icon: "star",
