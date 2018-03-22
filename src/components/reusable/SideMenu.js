@@ -64,6 +64,11 @@ const getMenuItems = user => {
         title: "My Profile",
         icon: "account-circle",
         onPress: () => nav.navigate("Profile", { userId: user.id })
+      },
+      {
+        title: "Find Users",
+        icon: "search",
+        onPress: () => nav.navigate("UserSearch", { userId: user.id })
       }
     ]
       .concat(getCombustMenuItems(user))

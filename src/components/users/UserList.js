@@ -4,12 +4,13 @@ import { View, ScrollView } from "react-native";
 import { List, ListItem } from "react-native-elements";
 
 export default (UserList = observer(({ users, onUserClicked }) => {
+  let userArr = typeof users === "array" ? users : Object.values(users);
+
   return (
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps="handled">
       <List containerStyle={{ marginTop: 0 }}>
         {users &&
-          Object.keys(users).map((userId, i) => {
-            const user = users[userId];
+          users.map((user, i) => {
             return user ? (
               <ListItem
                 key={i}
