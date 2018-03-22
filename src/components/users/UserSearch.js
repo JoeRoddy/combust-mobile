@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 import { View, Keyboard } from "react-native";
-import { SearchBar } from "react-native-elements";
+import { Icon, FormInput } from "react-native-elements";
 
 import userDb from "../../db/UserDb";
 import UserList from "../users/UserList";
@@ -23,12 +23,12 @@ export default class UserSearch extends Component {
     return (
       <View style={{ flex: 1 }}>
         <Header title="Find Users" />
-        <SearchBar
-          icon={{ name: "search" }}
+        <FormInput
           placeholder="Search for users.."
           onChangeText={this.handleQuery}
           onSubmitEditing={Keyboard.dismiss}
           value={this.state.query}
+          autoFocus
         />
         <UserList
           title="Friends"
