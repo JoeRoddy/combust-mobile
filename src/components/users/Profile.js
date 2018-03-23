@@ -22,112 +22,117 @@ export default class Profile extends Component {
     alert("Execute from your terminal:", "combust install chat");
   };
 
-  followUser(userId) {
+  followUser = userId => {
     alert("Execute from your terminal:", "combust install followers");
-  }
+  };
 
-  sendFriendRequest(userId) {
+  sendFriendRequest = userId => {
     alert("Execute from your terminal:", "combust install friends");
-  }
+  };
 
   render() {
     const routeInfo = nav.getCurrentRoute();
     const userId = routeInfo && routeInfo.params && routeInfo.params.userId;
     const user = userStore.getUserById(userId);
-    const isMyProfile = userId === userStore.userId;
-    const isFriend = false;
-    const isFollowed = false;
 
     return (
       <View>
         <Header title={user.displayName || "Profile"} />
-        <View style={styles.imageAndActionBar}>
-          <Image
-            style={{ height: 130 }}
-            source={{
-              uri:
-                "https://images.pexels.com/photos/207529/pexels-photo-207529.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=350"
-            }}
-          />
-          <View style={styles.actionBar}>
-            {!isMyProfile && (
-              <TouchableOpacity
-                style={styles.rowCentered}
-                onPress={() => this.openConversationWithUser(userId)}
-              >
-                <Icon
-                  name="chat"
-                  color="black"
-                  size={15}
-                  style={{ marginRight: 5 }}
-                />
-                <Text>Chat</Text>
-              </TouchableOpacity>
-            )}
-            {!isMyProfile &&
-              !isFollowed && (
-                <TouchableOpacity
-                  onPress={() => this.followUser(userId)}
-                  style={styles.rowCentered}
-                >
-                  <Icon
-                    name="person-add"
-                    color="black"
-                    size={15}
-                    style={{ marginRight: 5 }}
-                  />
-                  <Text>Follow</Text>
-                </TouchableOpacity>
-              )}
-            {!isMyProfile &&
-              !isFriend && (
-                <TouchableOpacity
-                  onPress={() => this.sendFriendRequest(userId)}
-                  style={styles.rowCentered}
-                >
-                  <Icon
-                    name="person-add"
-                    color="black"
-                    size={15}
-                    style={{ marginRight: 5 }}
-                  />
-                  <Text>Add Friend</Text>
-                </TouchableOpacity>
-              )}
-            {!isMyProfile &&
-              isFriend && (
-                <TouchableOpacity
-                  onPress={removeFriend}
-                  style={styles.rowCentered}
-                >
-                  <Text>Friends</Text>
-                  <Icon name="done" color="#009e51" />
-                </TouchableOpacity>
-              )}
-          </View>
-          <View style={styles.iconAndName}>
-            <Avatar
-              size={80}
-              src={user.iconUrl}
-              iconDetails={{ right: user.isOnline ? "online" : "offline" }}
-            />
-            <View
-              style={{
-                marginLeft: 10,
-                justifyContent: "center"
-              }}
-            >
-              <Text style={[styles.text, { marginBottom: 8 }]}>
-                {user.displayName}
-              </Text>
-            </View>
-          </View>
+        <View style={styles.profileCover}>
+          <CoverPhoto />
+          <UserActionBar that={this} userId={userId} />
+          <AvatarAndName user={user} />
         </View>
         <Text>example post content</Text>
       </View>
     );
   }
 }
+
+const CoverPhoto = () => (
+  <Image
+    style={{ height: 130 }}
+    source={{
+      uri:
+        "https://images.pexels.com/photos/207529/pexels-photo-207529.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=350"
+    }}
+  />
+);
+
+const AvatarAndName = ({ user }) => (
+  <View style={styles.iconAndName}>
+    <Avatar
+      size={80}
+      src={user.iconUrl}
+      iconDetails={{ right: user.isOnline ? "online" : "offline" }}
+    />
+    <View
+      style={{
+        marginLeft: 10,
+        justifyContent: "center"
+      }}
+    >
+      <Text style={[styles.text, { marginBottom: 8 }]}>{user.displayName}</Text>
+    </View>
+  </View>
+);
+
+const UserActionBar = ({ that, userId }) => {
+  const isMyProfile = userId === userStore.userId;
+  const isFriend = false;
+  const isFollowed = false;
+  return isMyProfile ? (
+    <View style={styles.actionBar}>
+      <Text>Your profile</Text>
+    </View>
+  ) : (
+    <View style={styles.actionBar}>
+      <BarAction
+        text="Chat"
+        icon="chat"
+        onPress={() => that.openConversationWithUser(userId)}
+      />
+      {!isFollowed && (
+        <BarAction
+          text="Follow"
+          icon="person-add"
+          onPress={() => that.followUser(userId)}
+        />
+      )}
+      {!isFriend && (
+        <BarAction
+          text="Add Friend"
+          icon="person-add"
+          onPress={() => that.sendFriendRequest(userId)}
+        />
+      )}
+      {isFriend && (
+        <View style={styles.rowCentered}>
+          <Text>Friends</Text>
+          <Icon name="done" color="#009e51" />
+        </View>
+      )}
+    </View>
+  );
+};
+
+const BarAction = ({ text, icon, onPress }) => (
+  <TouchableOpacity onPress={onPress} style={styles.rowCentered}>
+    <Icon name={icon} color="black" size={15} />
+    <Text style={{ marginLeft: 5, fontSize: 15 }}>{text}</Text>
+  </TouchableOpacity>
+);
+
+const alert = (title, message, onPress) => {
+  Alert.alert(
+    title,
+    message,
+    [{ text: "OK", onPress: typeof onPress === "funcion" ? onPress : null }],
+    {
+      cancelable: false
+    }
+  );
+};
 
 const styles = StyleSheet.create({
   coverImage: {
@@ -139,12 +144,12 @@ const styles = StyleSheet.create({
     textShadowColor: "black",
     textShadowOffset: { width: 1, height: 1 }
   },
-  imageAndActionBar: {},
+  profileCover: {},
   iconAndName: {
     flexDirection: "row",
     position: "absolute",
     top: 80,
-    left: 30
+    left: 20
   },
   actionBar: {
     backgroundColor: "#C4C4C4",
@@ -152,7 +157,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingRight: 35
+    paddingRight: 15
   },
   accountsBar: {
     height: 60,
@@ -171,14 +176,3 @@ const styles = StyleSheet.create({
     marginRight: 10
   }
 });
-
-const alert = (title, message, onPress) => {
-  Alert.alert(
-    title,
-    message,
-    [{ text: "OK", onPress: typeof onPress === "funcion" ? onPress : null }],
-    {
-      cancelable: false
-    }
-  );
-};
