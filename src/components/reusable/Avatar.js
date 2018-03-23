@@ -13,8 +13,6 @@ const Avatar = ({ src, size, onPress, online, styles }) => {
     borderRadius: size / 2
   };
 
-  console.log("avatar online:", online);
-
   return (
     <View>
       <TouchableOpacity

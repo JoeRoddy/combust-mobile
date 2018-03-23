@@ -30,8 +30,6 @@ export default class Form extends Component {
     const uploadStatus = field + "_uploadStatus";
 
     uploadImgAndGetUrl("images/", (err, res) => {
-      console.log("res:", res);
-
       err
         ? this.setState({ errMessage: err.message })
         : res.status === "completed"
