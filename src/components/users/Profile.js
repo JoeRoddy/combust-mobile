@@ -64,8 +64,9 @@ const AvatarAndName = ({ user }) => (
   <View style={styles.iconAndName}>
     <Avatar
       size={80}
+      online={user.isOnline}
       src={user.iconUrl}
-      iconDetails={{ right: user.isOnline ? "online" : "offline" }}
+      icon={user.isOnline ? "online" : "offline"}
     />
     <View
       style={{
