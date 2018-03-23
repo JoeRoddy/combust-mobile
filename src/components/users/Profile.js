@@ -5,12 +5,13 @@ import {
   Text,
   Alert,
   TouchableOpacity,
-  Image
+  Image,
+  ScrollView
 } from "react-native";
-import { Button, Icon } from "react-native-elements";
+import { Button, Icon, Card } from "react-native-elements";
 import { observer } from "mobx-react";
 
-import { viewStyles } from "../../assets/styles/AppStyles";
+import { viewStyles, textStyles } from "../../assets/styles/AppStyles";
 import userStore from "../../stores/UserStore";
 import nav from "../../helpers/NavigatorHelper";
 import Header from "../reusable/Header";
@@ -36,14 +37,14 @@ export default class Profile extends Component {
     const user = userStore.getUserById(userId);
 
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <Header title={user.displayName || "Profile"} />
         <View style={styles.profileCover}>
           <CoverPhoto />
           <UserActionBar that={this} userId={userId} />
           <AvatarAndName user={user} />
         </View>
-        <Text>example post content</Text>
+        <ExamplePosts user={user} />
       </View>
     );
   }
@@ -83,7 +84,7 @@ const UserActionBar = ({ that, userId }) => {
   const isFollowed = false;
   return isMyProfile ? (
     <View style={styles.actionBar}>
-      <Text>Your profile</Text>
+      <Text>Your Profile</Text>
     </View>
   ) : (
     <View style={styles.actionBar}>
@@ -121,6 +122,24 @@ const BarAction = ({ text, icon, onPress }) => (
     <Icon name={icon} color="black" size={15} />
     <Text style={{ marginLeft: 5, fontSize: 15 }}>{text}</Text>
   </TouchableOpacity>
+);
+
+const ExamplePosts = ({ user }) => (
+  <ScrollView style={{ marginBottom: 10 }}>
+    {[0, 1, 2, 3, 4].map(i => (
+      <Card
+        key={i}
+        title={user.displayName + " @ 2:05 pm"}
+        containerStyle={{ borderRadius: 3 }}
+      >
+        <Text>
+          Execute
+          <Text style={textStyles.code}> combust install posts </Text> to start
+          creating posts
+        </Text>
+      </Card>
+    ))}
+  </ScrollView>
 );
 
 const alert = (title, message, onPress) => {
