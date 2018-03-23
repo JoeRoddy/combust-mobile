@@ -21,10 +21,10 @@ const SCREENS = {
 };
 
 //combust hook, do not rename
-const COMBUST_GENERATE_SCREENS = {};
+const COMBUST_SCREENS = {};
 
 export default (Routes = DrawerNavigator(
-  Object.assign(SCREENS, COMBUST_GENERATE_SCREENS),
+  Object.assign(SCREENS, COMBUST_SCREENS),
   {
     initialRouteName: nav.initialRoute,
     contentComponent: SideMenu
