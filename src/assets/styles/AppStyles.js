@@ -15,6 +15,9 @@ export const textStyles = {
   code: {
     fontWeight: "bold",
     color: "#f442e8"
+  },
+  secondary: {
+    color: "#999"
   }
 };
 

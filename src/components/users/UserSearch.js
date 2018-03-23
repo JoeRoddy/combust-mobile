@@ -35,7 +35,7 @@ export default class UserSearch extends Component {
           users={this.state.results}
           onUserClicked={user => {
             Keyboard.dismiss();
-            nav.navigate("Profile", { userId: user.id });
+            nav.navigate("Profile", { id: user.id });
           }}
         />
       </View>

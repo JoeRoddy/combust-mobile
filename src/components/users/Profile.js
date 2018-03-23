@@ -33,10 +33,10 @@ export default class Profile extends Component {
 
   render() {
     const routeInfo = nav.getCurrentRoute();
-    const userId = routeInfo && routeInfo.params && routeInfo.params.userId;
+    const userId = routeInfo && routeInfo.params && routeInfo.params.id;
     const user = userStore.getUserById(userId);
 
-    return (
+    return user ? (
       <View style={{ flex: 1 }}>
         <Header title={user.displayName || "Profile"} />
         <View style={styles.profileCover}>
@@ -46,6 +46,8 @@ export default class Profile extends Component {
         </View>
         <ExamplePosts user={user} />
       </View>
+    ) : (
+      <View />
     );
   }
 }
