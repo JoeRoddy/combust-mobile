@@ -44,7 +44,6 @@ class WelcomeStore {
           this.currentStep = 4;
         })
         .catch(error => {
-          console.error("err trying sign in:", error);
           this.emailAuthEnabled = error.code === "auth/email-already-in-use";
           this.currentStep = this.emailAuthEnabled ? 3 : 2;
           storeItem(authEnabledForApp, this.emailAuthEnabled);
