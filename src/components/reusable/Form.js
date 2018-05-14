@@ -46,7 +46,9 @@ export default class Form extends Component {
       ? this.state[field]
       : defaultValues && defaultValues[field]
         ? defaultValues[field]
-        : defaultValues && defaultValues[cameled] ? defaultValues[cameled] : "";
+        : defaultValues && defaultValues[cameled]
+          ? defaultValues[cameled]
+          : "";
   };
 
   render() {
@@ -104,6 +106,8 @@ const RenderInputFieldForDataType = props => {
   switch (props.dataType) {
     case "image":
       return <RenderImageInput {...props} />;
+    case "number":
+      return <RenderNumberInput {...props} />;
     default:
       return <RenderStringInput {...props} />;
   }
@@ -111,6 +115,17 @@ const RenderInputFieldForDataType = props => {
 
 const RenderStringInput = ({ fieldName, that }) => (
   <FormInput
+    placeholder={fieldName}
+    onChangeText={newVal => that.setState({ [fieldName]: newVal })}
+    secureTextEntry={fieldName.toLowerCase() === "password"}
+    onSubmitEditing={Keyboard.dismiss}
+    value={that.getInputValue(fieldName)}
+  />
+);
+
+const RenderNumberInput = ({ fieldName, that }) => (
+  <FormInput
+    keyboardType="numeric"
     placeholder={fieldName}
     onChangeText={newVal => that.setState({ [fieldName]: newVal })}
     secureTextEntry={fieldName.toLowerCase() === "password"}
