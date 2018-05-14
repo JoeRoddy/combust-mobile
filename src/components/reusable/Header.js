@@ -8,16 +8,15 @@ import nav from "../../helpers/NavigatorHelper";
 
 @observer
 export default class Header extends Component {
-  componentWillMount() {
-    const that = this;
-    BackHandler.addEventListener("hardwareBackPress", that.goBack);
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.goBack);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.goBack) {
+  componentDidUpdate(prevProps) {
+    if (this.props.goBack) {
       BackHandler.removeEventListener("hardwareBackPress", this.goBack);
       BackHandler.addEventListener("hardwareBackPress", function() {
-        nextProps.goBack();
+        this.props.goBack();
       });
     } else {
       BackHandler.addEventListener("hardwareBackPress", this.goBack);
@@ -25,9 +24,8 @@ export default class Header extends Component {
   }
 
   goBack = () => {
-    const that = this;
-    if (that.props.goBack) {
-      that.props.goBack();
+    if (this.props.goBack) {
+      this.props.goBack();
       return true;
     } else {
       nav.goBack();

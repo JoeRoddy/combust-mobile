@@ -1,4 +1,4 @@
-import { DrawerNavigator } from "react-navigation";
+import { createDrawerNavigator } from "react-navigation";
 
 import nav from "../helpers/NavigatorHelper";
 import Welcome from "./Welcome";
@@ -23,7 +23,7 @@ const SCREENS = {
 //combust hook, do not rename
 const COMBUST_SCREENS = {};
 
-export default (Routes = DrawerNavigator(
+export default (Routes = createDrawerNavigator(
   Object.assign(SCREENS, COMBUST_SCREENS),
   {
     initialRouteName: nav.initialRoute,
