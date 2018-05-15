@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
 import { Button, Text } from "react-native-elements";
 import { observer } from "mobx-react";
+import Expo from "expo";
+import firebase from "firebase";
 
 import userStore from "../../stores/UserStore";
 import nav from "../../helpers/NavigatorHelper";
@@ -62,6 +64,12 @@ export default class Login extends Component {
           title="Create an Account"
           onPress={e => nav.navigate("Register")}
         />
+        <Button
+          raised
+          backgroundColor="#3B5998"
+          title="Login with Facebook"
+          onPress={_loginWithFacebook}
+        />
         {this.state.errMsg && (
           <Text style={{ color: "red", marginTop: 10, textAlign: "center" }}>
             {this.state.errMsg}
@@ -89,3 +97,23 @@ const styles = StyleSheet.create({
     textAlign: "center"
   }
 });
+
+/**
+ * starts the facebook ui login process
+ */
+const _loginWithFacebook = async function() {
+  const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
+    "YOUR_APP_ID_HERE",
+    { permissions: ["public_profile", "email"] }
+  );
+  if (type === "success") {
+    const credential = firebase.auth.FacebookAuthProvider.credential(token);
+    firebase
+      .auth()
+      .signInAndRetrieveDataWithCredential(credential)
+      .then(res => {})
+      .catch(error => {
+        console.log("firebase cred err:", error);
+      });
+  }
+};

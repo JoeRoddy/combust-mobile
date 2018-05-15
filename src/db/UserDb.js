@@ -53,12 +53,15 @@ class UserDb {
         userRef.once("value").then(snap => {
           const userData = snap.val();
           if (userData) {
-            userRef.child("lastOnline").update(new Date());
+            userRef.update({ lastOnline: new Date().getTime() });
             _applyLstenersForCurrentUser(userAuth.uid, (err, data) => {
               if (err) return callback(err);
               data.id = userAuth.uid;
               callback(null, data);
             });
+          } else if (!snap.exists() && userAuth.providerData) {
+            const user = {};
+            _createUserFromThirdPartyAuth(userAuth, callback);
           }
         });
       } else {
@@ -192,9 +195,12 @@ const _applyLstenersForCurrentUser = function(uid, callback) {
 };
 
 const _getPublicUserObject = function(email) {
+  const timeNow = new Date().getTime();
   return {
     //globally readable, user-writeable
     email: email,
+    createdAt: timeNow,
+    lastOnline: timeNow,
     isOnline: true,
     iconUrl: _getRandomProfilePic()
   };
@@ -241,6 +247,38 @@ const _monitorOnlineStatus = function() {
         userRef.set(true);
       }
     }, 2000);
+  });
+};
+
+const _createUserFromThirdPartyAuth = function(authInfo, callback) {
+  const { providerData, uid } = authInfo;
+  let mainProviderInfo = providerData[0];
+  const [firstName, lastName] = mainProviderInfo.displayName.split(" ");
+  const timeNow = new Date().getTime();
+
+  const publicInfo = {
+    firstName,
+    lastName,
+    email: mainProviderInfo.email,
+    phoneNumber: mainProviderInfo.phoneNumber,
+    iconUrl: mainProviderInfo.photoURL,
+    providerId: mainProviderInfo.providerId,
+    providerUid: mainProviderInfo.uid,
+    createdAt: timeNow,
+    lastOnline: timeNow,
+    isOnline: true
+  };
+  userDataByPrivacy = {
+    publicInfo,
+    privateInfo: _getPrivateUserObject(),
+    serverInfo: _getServerUserObject()
+  };
+
+  userDb.saveToUsersCollection(uid, userDataByPrivacy);
+  _applyLstenersForCurrentUser(uid, (err, data) => {
+    if (err) return callback(err);
+    data.id = uid;
+    callback(null, data);
   });
 };
 
