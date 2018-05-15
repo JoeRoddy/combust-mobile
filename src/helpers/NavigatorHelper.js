@@ -1,5 +1,9 @@
-import { NavigationActions } from "react-navigation";
-import { NavigationParams, NavigationRoute } from "react-navigation";
+import {
+  NavigationActions,
+  NavigationParams,
+  NavigationRoute,
+  DrawerActions
+} from "react-navigation";
 
 const initialRoute = "Home";
 let _container; // eslint-disable-line
@@ -15,12 +19,7 @@ function navigate(routeName, params, hideFromHistory) {
 }
 
 function openSideMenu() {
-  //ghetto fix to solve double taps, see:
-  //https://github.com/react-navigation/react-navigation/issues/1960
-  _dispatchNavigation("DrawerClose");
-  setTimeout(() => {
-    _dispatchNavigation("DrawerOpen");
-  }, 0);
+  _container.dispatch(DrawerActions.openDrawer());
 }
 
 function getCurrentRoute() {

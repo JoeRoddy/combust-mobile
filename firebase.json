@@ -1,0 +1,8 @@
+{
+  "database": {
+    "rules": "./src/.combust/database.rules.json"
+  },
+  "storage": {
+    "rules": "./src/.combust/storage.rules"
+  }
+}

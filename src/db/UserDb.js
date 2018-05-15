@@ -19,8 +19,8 @@ class UserDb {
           serverInfo: _getServerUserObject()
         };
 
-        this.saveToUsersCollection(res.uid, userDataByPrivacy);
-        userDataByPrivacy.id = res.uid;
+        this.saveToUsersCollection(res.user.uid, userDataByPrivacy);
+        userDataByPrivacy.id = res.user.uid;
         return callback(null, userDataByPrivacy);
       })
       .catch(error => {
