@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Keyboard, Image } from "react-native";
-import { FormInput, Text, Button } from "react-native-elements";
+import { FormInput, Text, Button, CheckBox } from "react-native-elements";
 
 import { firebaseConfig } from "../../.combust/config";
 import { colors } from "../../assets/styles/AppStyles";
@@ -108,6 +108,8 @@ const RenderInputFieldForDataType = props => {
       return <RenderImageInput {...props} />;
     case "number":
       return <RenderNumberInput {...props} />;
+    case "boolean":
+      return <RenderBooleanInput {...props} />;
     default:
       return <RenderStringInput {...props} />;
   }
@@ -133,6 +135,19 @@ const RenderNumberInput = ({ fieldName, that }) => (
     value={that.getInputValue(fieldName)}
   />
 );
+
+const RenderBooleanInput = ({ fieldName, that }) => {
+  const isChecked = that.state[fieldName] || false;
+  return (
+    <CheckBox
+      title={fieldName}
+      checked={isChecked}
+      onPress={() => {
+        that.setState({ [fieldName]: !isChecked });
+      }}
+    />
+  );
+};
 
 const RenderImageInput = ({ fieldName, that }) => (
   <View>
