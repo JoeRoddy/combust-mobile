@@ -39,12 +39,12 @@ export default class Profile extends Component {
     return user ? (
       <View style={{ flex: 1 }}>
         <Header title={user.displayName || "Profile"} />
-        <View style={styles.profileCover}>
+        <ScrollView>
           <CoverPhoto />
           <UserActionBar that={this} userId={userId} />
           <AvatarAndName user={user} />
-        </View>
-        <ExamplePosts user={user} />
+          <ExamplePosts user={user} />
+        </ScrollView>
       </View>
     ) : (
       <View />
