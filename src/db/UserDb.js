@@ -153,7 +153,7 @@ class UserDb {
       return [];
     }
     const users = userStore.usersMap.values();
-    return users.filter(user => {
+    return Array.from(users).filter(user => {
       return (
         user.id !== userStore.userId &&
         (!user[field] ||
