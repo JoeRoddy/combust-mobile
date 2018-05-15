@@ -13,13 +13,22 @@ function setContainer(container) {
   _container = container;
 }
 
-function navigate(routeName, params, hideFromHistory) {
-  _history.push({ routeName: routeName, params: params || null });
+function navigate(routeName, params = null, hideFromHistory) {
+  const r = getCurrentRoute() || {};
+  if (r.routeName === routeName && r.params == params) {
+    //if same route, do nothing, close sidemenu if open (cur route clicked)
+    return closeSideMenu();
+  }
+  _history.push({ routeName, params: params });
   _dispatchNavigation(routeName, params);
 }
 
 function openSideMenu() {
   _container.dispatch(DrawerActions.openDrawer());
+}
+
+function closeSideMenu() {
+  _container.dispatch(DrawerActions.closeDrawer());
 }
 
 function getCurrentRoute() {
