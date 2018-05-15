@@ -13,13 +13,13 @@ function setContainer(container) {
   _container = container;
 }
 
-function navigate(routeName, params = null, hideFromHistory) {
+function navigate(routeName, params = null) {
   const r = getCurrentRoute() || {};
   if (r.routeName === routeName && r.params == params) {
     //if same route, do nothing, close sidemenu if open (cur route clicked)
     return closeSideMenu();
   }
-  _history.push({ routeName, params: params });
+  _history.push({ routeName, params });
   _dispatchNavigation(routeName, params);
 }
 
