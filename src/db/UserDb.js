@@ -29,20 +29,31 @@ class UserDb {
       });
   }
 
+  /**
+   * returns a promise representing the user's
+   * publicInfo update, if it changed
+   * @param {*} uid
+   * @param {*} userDataByPrivacy
+   */
   saveToUsersCollection(uid, userDataByPrivacy) {
     if (!uid) {
       return;
     }
+
+    let firebaseUpdatePromise = null;
     ["publicInfo", "privateInfo", "serverInfo"].forEach(privacy => {
       const data = userDataByPrivacy[privacy];
       if (data) {
-        firebase
+        let prom = firebase
           .database()
           .ref("/users/" + privacy)
           .child(uid)
           .update(data);
+        firebaseUpdatePromise =
+          privacy === "publicInfo" ? prom : firebaseUpdatePromise;
       }
     });
+    return firebaseUpdatePromise;
   }
 
   listenToCurrentUser(callback) {
@@ -54,13 +65,12 @@ class UserDb {
           const userData = snap.val();
           if (userData) {
             userRef.update({ lastOnline: new Date().getTime() });
-            _applyLstenersForCurrentUser(userAuth.uid, (err, data) => {
+            _applyListenersForCurrentUser(userAuth.uid, (err, data) => {
               if (err) return callback(err);
               data.id = userAuth.uid;
               callback(null, data);
             });
           } else if (!snap.exists() && userAuth.providerData) {
-            const user = {};
             _createUserFromThirdPartyAuth(userAuth, callback);
           }
         });
@@ -90,9 +100,10 @@ class UserDb {
     auth.signInWithEmailAndPassword(user.email, user.password).then(
       res => {
         callback(null, res);
+        const { uid } = res.user;
         db
           .ref("users/publicInfo")
-          .child(res.uid)
+          .child(uid)
           .update({
             isOnline: true
           });
@@ -113,12 +124,12 @@ class UserDb {
     if (!user) {
       throw new Error("No user provided to logout");
     }
+    auth.signOut();
     firebase
       .database()
       .ref("users/publicInfo")
       .child(user.id)
       .update({ isOnline: false });
-    auth.signOut();
   }
 
   /**
@@ -153,20 +164,24 @@ class UserDb {
       return [];
     }
     const users = userStore.usersMap.values();
-    return Array.from(users).filter(user => {
+    let i = Array.from(users).filter(user => {
       return (
         user.id !== userStore.userId &&
-        (!user[field] ||
-          user[field].toUpperCase().includes(query.toUpperCase()))
+        (user[field] && user[field].toUpperCase().includes(query.toUpperCase()))
       );
     });
+    return i;
+  }
+
+  sendPasswordResetEmail(email) {
+    return firebase.auth().sendPasswordResetEmail(email);
   }
 }
 
 const userDb = new UserDb();
 export default userDb;
 
-const _applyLstenersForCurrentUser = function(uid, callback) {
+const _applyListenersForCurrentUser = function(uid, callback) {
   if (!uid) {
     throw new Error("no uid provided to listenToUser()");
   }
@@ -238,7 +253,6 @@ const _monitorOnlineStatus = function() {
   amOnline.on("value", snapshot => {
     if (snapshot.val()) {
       userRef.onDisconnect().set(false);
-      userRef.set(true);
     }
   });
   userRef.on("value", snapshot => {
@@ -252,7 +266,7 @@ const _monitorOnlineStatus = function() {
 
 const _createUserFromThirdPartyAuth = function(authInfo, callback) {
   const { providerData, uid } = authInfo;
-  let mainProviderInfo = providerData[0];
+  const mainProviderInfo = providerData[0];
   const [firstName, lastName] = mainProviderInfo.displayName.split(" ");
   const timeNow = new Date().getTime();
 
@@ -274,12 +288,18 @@ const _createUserFromThirdPartyAuth = function(authInfo, callback) {
     serverInfo: _getServerUserObject()
   };
 
-  userDb.saveToUsersCollection(uid, userDataByPrivacy);
-  _applyLstenersForCurrentUser(uid, (err, data) => {
-    if (err) return callback(err);
-    data.id = uid;
-    callback(null, data);
-  });
+  userDb
+    .saveToUsersCollection(uid, userDataByPrivacy)
+    .then(res => {
+      _applyListenersForCurrentUser(uid, (err, data) => {
+        if (err) return callback(err);
+        data.id = uid;
+        callback(null, data);
+      });
+    })
+    .catch(err => {
+      console.log("err saving user from social auth:", err);
+    });
 };
 
 const _getRandomProfilePic = function() {
