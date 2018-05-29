@@ -1,5 +1,5 @@
 import React from "react";
-import firebase from "firebase";
+import firebase from "firebase/app";
 
 import { firebaseConfig } from "./src/.combust/config";
 import { initializeStores } from "./src/.combust/init";

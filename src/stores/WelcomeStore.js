@@ -1,5 +1,8 @@
 import { observable } from "mobx";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/database";
+import "firebase/auth";
+
 import { storeItem, getItem } from "../helpers/CacheHelper";
 
 class WelcomeStore {
