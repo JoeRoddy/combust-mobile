@@ -5,7 +5,9 @@ import {
   DrawerActions
 } from "react-navigation";
 
-const initialRoute = "Home";
+import { INITIAL_ROUTE } from "../components/Routes";
+
+const initialRoute = INITIAL_ROUTE;
 let _container; // eslint-disable-line
 let _history = [{ routeName: initialRoute, params: null }];
 

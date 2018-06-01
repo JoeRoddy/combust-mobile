@@ -1,6 +1,5 @@
 import { createDrawerNavigator } from "react-navigation";
 
-import nav from "../helpers/NavigatorHelper";
 import Welcome from "./Welcome";
 import SideMenu from "./reusable/SideMenu";
 import Login from "./users/Login";
@@ -20,13 +19,15 @@ const SCREENS = {
   ScreenTwo: { screen: ScreenTwo, path: "/ScreenTwo" }
 };
 
+export const INITIAL_ROUTE = "Home";
+
 //combust hook, do not rename
 const COMBUST_SCREENS = {};
 
 export default (Routes = createDrawerNavigator(
   Object.assign(SCREENS, COMBUST_SCREENS),
   {
-    initialRouteName: nav.initialRoute,
+    initialRouteName: INITIAL_ROUTE,
     contentComponent: SideMenu
   }
 ));
