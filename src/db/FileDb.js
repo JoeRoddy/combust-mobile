@@ -6,11 +6,11 @@ export const uploadImageAsync = async function(uri, documentFolder) {
   const blob = await response.blob();
   const ref = firebase
     .storage()
-    .ref()
+    .ref(`/${documentFolder}`)
     .child(
       firebase
         .database()
-        .ref(`/${documentFolder}`)
+        .ref()
         .push().key
     );
   const snapshot = await ref.put(blob);

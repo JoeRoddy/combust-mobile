@@ -3,13 +3,19 @@ import { StyleSheet, View, Keyboard, Image } from "react-native";
 import { FormInput, Text, CheckBox } from "react-native-elements";
 
 import Button from "../reusable/Button";
-import { firebaseConfig } from "../../.combust/config";
 import { colors } from "../../assets/styles/AppStyles";
 import { uploadImgAndGetUrl } from "../../helpers/ImageHelper";
-import { uploadDocument } from "../../db/FileDb";
 
 export default class Form extends Component {
   state = {};
+
+  componentDidMount() {
+    this._mounted = true;
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
+  }
 
   submitForm = e => {
     Keyboard.dismiss();
@@ -27,15 +33,15 @@ export default class Form extends Component {
     onSubmit(formData);
   };
 
-  uploadImage = field => {
+  uploadImage = async field => {
     const uploadStatus = field + "_uploadStatus";
-
-    uploadImgAndGetUrl("images/", (err, res) => {
+    uploadImgAndGetUrl("images/", (err, url) => {
+      if (!this._mounted) {
+        return;
+      }
       err
-        ? this.setState({ errMessage: err.message })
-        : res.status === "completed"
-          ? this.setState({ [field]: res.url, [uploadStatus]: "completed" })
-          : this.setState({ [uploadStatus]: res.status });
+        ? this.setState({ errMessage: err.message, [uploadStatus]: null })
+        : this.setState({ [field]: url, [uploadStatus]: "Upload complete" });
     });
   };
 
@@ -128,7 +134,7 @@ const RenderNumberInput = ({ fieldName, that }) => (
     onChangeText={newVal => that.setState({ [fieldName]: newVal })}
     secureTextEntry={fieldName.toLowerCase() === "password"}
     onSubmitEditing={Keyboard.dismiss}
-    value={that.getInputValue(fieldName)}
+    value={`${that.getInputValue(fieldName)}`}
   />
 );
 
@@ -149,7 +155,9 @@ const RenderImageInput = ({ fieldName, that }) => (
   <View>
     <View style={{ marginLeft: 25 }}>
       {that.state[fieldName + "_uploadStatus"] && (
-        <Text>Upload: {that.state[fieldName + "_uploadStatus"]}</Text>
+        <Text>
+          {fieldName}: {that.state[fieldName + "_uploadStatus"]}
+        </Text>
       )}
       {that.state[fieldName] && (
         <Image

@@ -1,18 +1,18 @@
-import firebase from "firebase/app";
-import "firebase/storage";
+import { ImagePicker } from "expo";
 
-export const uploadImageAsync = async function(uri, documentFolder) {
-  const response = await fetch(uri);
-  const blob = await response.blob();
-  const ref = firebase
-    .storage()
-    .ref()
-    .child(
-      firebase
-        .database()
-        .ref(`/${documentFolder}`)
-        .push().key
-    );
-  const snapshot = await ref.put(blob);
-  return await ref.getDownloadURL();
-};
+import { uploadImageAsync } from "../db/FileDb";
+
+export async function uploadImgAndGetUrl(documentFolder, progressCallback) {
+  const pickerResult = await ImagePicker.launchImageLibraryAsync({
+    allowsEditing: false,
+    aspect: [4, 3],
+    base64: true
+  });
+
+  if (pickerResult.cancelled) {
+    return;
+  }
+
+  const imgUrl = await uploadImageAsync(pickerResult.uri, documentFolder);
+  progressCallback(null, imgUrl);
+}
