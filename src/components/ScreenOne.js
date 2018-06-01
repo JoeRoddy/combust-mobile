@@ -1,28 +1,38 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
-import { viewStyles } from "../assets/styles/AppStyles";
+import { viewStyles, textStyles } from "../assets/styles/AppStyles";
 import nav from "../helpers/NavigatorHelper";
-import Header from "./reusable/Header";
+import { Button, Header, Screen } from "./reusable";
 
 @observer
 export default class ScreenOne extends React.Component {
   render() {
     return (
-      <View>
-        <Header title="Screen 1" />
-        <View style={viewStyles.padding}>
-          <Text>Example screen 1 content</Text>
-          <Button
-            title="Go to Screen 2"
-            onPress={() => nav.navigate("ScreenTwo")}
-          />
-        </View>
-      </View>
+      <Screen title="Screen 1">
+        <Text style={styles.margin}>
+          Example screen 1 content. Open it up and start exploring!
+        </Text>
+        <Text style={[textStyles.code, styles.file]}>
+          src/components/ScreenOne.js
+        </Text>
+        <Button
+          secondary
+          title="Go to Screen 2"
+          onPress={() => nav.navigate("ScreenTwo")}
+        />
+      </Screen>
     );
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  margin: {
+    margin: 10
+  },
+  file: {
+    marginBottom: 10,
+    textAlign: "center"
+  }
+});

@@ -33,7 +33,8 @@ Avatar.propTypes = {
   src: PropTypes.string,
   size: PropTypes.number,
   onPress: PropTypes.func,
-  styles: PropTypes.object
+  styles: PropTypes.object,
+  online: PropTypes.bool
 };
 
 export default Avatar;

@@ -8,15 +8,15 @@ import {
   Image,
   ScrollView
 } from "react-native";
-import { Card, Button } from "react-native-elements";
+import { Card } from "react-native-elements";
 import { observer } from "mobx-react";
 
 import { textStyles, viewStyles } from "../assets/styles/AppStyles";
 import { stores } from "../.combust/init";
 import welcomeStore from "../stores/WelcomeStore";
 import userStore from "../stores/UserStore";
-import Header from "./reusable/Header";
 import nav from "../helpers/NavigatorHelper";
+import { Button, Header } from "./reusable";
 
 @observer
 export default class Welcome extends React.Component {
@@ -63,12 +63,6 @@ const ConfigureFirebase = () => {
         <Button
           icon={{ type: "font-awesome", name: "database" }}
           backgroundColor="#FFA000"
-          buttonStyle={{
-            borderRadius: 0,
-            marginLeft: 0,
-            marginRight: 0,
-            marginBottom: 0
-          }}
           onPress={() => {
             Linking.openURL("https://console.firebase.google.com");
           }}
@@ -77,13 +71,12 @@ const ConfigureFirebase = () => {
       </Card>
       <Card title="2) Configure Locally">
         <Text style={{ fontWeight: "bold" }}>From your terminal:</Text>
-
         <Text>
           Execute <Text style={textStyles.code}>combust configure</Text>{" "}
         </Text>
         <Text>
-          Restart the app with{" "}
-          <Text style={textStyles.code}>npm run {Platform.OS}</Text>
+          Close the app then restart with{" "}
+          <Text style={textStyles.code}>npm start</Text>
         </Text>
       </Card>
     </ScrollView>
@@ -96,6 +89,7 @@ const EnableAuthentication = () => {
       <Text>Awesome, looks like firebase is hooked up.</Text>
       <Text>Next, enable email/password authentication</Text>
       <Button
+        secondary
         title="Enable Email Auth"
         onPress={() => {
           Linking.openURL(
@@ -110,8 +104,9 @@ const EnableAuthentication = () => {
 const CreateInitialUser = () => {
   return (
     <View>
-      <Text>Awesome, now create your first user</Text>
+      <Text style={{ margin: 10 }}>Awesome, now create your first user</Text>
       <Button
+        secondary
         title="Register"
         onPress={() => {
           nav.navigate("Register");
@@ -124,8 +119,9 @@ const CreateInitialUser = () => {
 const ExecuteGenerate = ({ user }) => {
   return (
     <View>
-      <Text>You're logged in! email: {user.email}</Text>
+      <Text style={{ margin: 10 }}>You're logged in! email: {user.email}</Text>
       <Button
+        secondary
         title="Go to Screen 1"
         onPress={() => nav.navigate("ScreenOne")}
       />

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
-import { Button, Text } from "react-native-elements";
+import { Text } from "react-native-elements";
 import { observer } from "mobx-react";
 
 import userStore from "../../stores/UserStore";
+import { Button, Form } from "../reusable";
 import nav from "../../helpers/NavigatorHelper";
-import Form from "../reusable/Form";
 import { colors } from "../../assets/styles/AppStyles";
 
 const safeErrorCodes = {
@@ -48,7 +48,6 @@ export default class Login extends Component {
     return this.state.loaded ? (
       <KeyboardAvoidingView behavior="padding" style={styles.view}>
         <Text style={styles.appName}>Your App</Text>
-        {false && <Text>You already have an account.</Text>}
         <Form
           style={styles.login}
           onSubmit={this.login}

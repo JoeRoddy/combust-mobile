@@ -14,8 +14,7 @@ import { observer } from "mobx-react";
 import { viewStyles, textStyles } from "../../assets/styles/AppStyles";
 import userStore from "../../stores/UserStore";
 import nav from "../../helpers/NavigatorHelper";
-import Header from "../reusable/Header";
-import Avatar from "../reusable/Avatar";
+import { Avatar, Header } from "../reusable";
 
 @observer
 export default class Profile extends Component {

@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, KeyboardAvoidingView } from "react-native";
-import { Button } from "react-native-elements";
 import { observer } from "mobx-react";
 
-import { colors } from "../../assets/styles/AppStyles";
 import userStore from "../../stores/UserStore";
-import Form from "../reusable/Form";
 import nav from "../../helpers/NavigatorHelper";
+import { colors } from "../../assets/styles/AppStyles";
+import { Button, Form } from "../reusable";
 
 const fields = {
   //legal data types: string, text, number, boolean, image
@@ -51,7 +50,7 @@ export default class Register extends Component {
           title="Register"
         />
         <Button
-          title="Login instead"
+          title="Login Instead"
           raised
           backgroundColor={colors.secondary}
           onPress={e => nav.navigate("Login")}

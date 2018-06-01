@@ -2,21 +2,25 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { observer } from "mobx-react";
 
-import { viewStyles } from "../assets/styles/AppStyles";
-import Header from "./reusable/Header";
+import { viewStyles, textStyles } from "../assets/styles/AppStyles";
+import { Header, Screen } from "./reusable";
 
 @observer
 export default class ScreenTwo extends React.Component {
   render() {
     return (
-      <View>
-        <Header title="Screen 2" />
-        <View style={viewStyles.screenContent}>
-          <Text>Example screen 2 content</Text>
-        </View>
-      </View>
+      <Screen title="Screen Two">
+        <Text style={styles.margin}>Example screen 2 content, edit this!</Text>
+        <Text style={[textStyles.code, styles.margin]}>
+          src/components/ScreenTwo.js
+        </Text>
+      </Screen>
     );
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  margin: {
+    margin: 10
+  }
+});

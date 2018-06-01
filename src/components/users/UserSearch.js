@@ -4,9 +4,9 @@ import { View, Keyboard } from "react-native";
 import { Icon, FormInput } from "react-native-elements";
 
 import userDb from "../../db/UserDb";
-import UserList from "../users/UserList";
-import Header from "../reusable/Header";
 import nav from "../../helpers/NavigatorHelper";
+import { Header } from "../reusable";
+import UserList from "../users/UserList";
 
 export default class UserSearch extends Component {
   state = {

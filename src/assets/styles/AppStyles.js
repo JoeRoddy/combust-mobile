@@ -1,8 +1,9 @@
 export const colors = {
-  primary: "black",
+  primary: "#1e87f0",
   secondary: "grey",
   success: "#03b75d",
-  warning: "#f0506e"
+  danger: "#f0506e",
+  warning: "#faa05a"
 };
 
 export const viewStyles = {
@@ -16,9 +17,10 @@ export const textStyles = {
     fontWeight: "bold",
     color: "#f442e8"
   },
+  primary: {
+    color: colors.primary
+  },
   secondary: {
-    color: "#999"
+    color: colors.secondary
   }
 };
-
-export const buttonStyles = {};

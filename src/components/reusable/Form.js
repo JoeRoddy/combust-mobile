@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Keyboard, Image } from "react-native";
-import { FormInput, Text, Button, CheckBox } from "react-native-elements";
+import { FormInput, Text, CheckBox } from "react-native-elements";
 
+import Button from "../reusable/Button";
 import { firebaseConfig } from "../../.combust/config";
 import { colors } from "../../assets/styles/AppStyles";
 import { uploadImgAndGetUrl } from "../../helpers/ImageHelper";
@@ -80,18 +81,13 @@ export default class Form extends Component {
             />
           ))}
         <Button
-          backgroundColor={colors.success}
-          raised
+          success
           title={submitText || "Submit"}
           onPress={this.submitForm}
           containerViewStyle={{ marginTop: 10, marginBottom: 10 }}
         />
         {onCancel && (
-          <Button
-            title={cancelText || "Cancel"}
-            backgroundColor={colors.warning}
-            onPress={onCancel}
-          />
+          <Button danger title={cancelText || "Cancel"} onPress={onCancel} />
         )}
         {this.props.children}
         {this.state.errMessage && (
@@ -163,7 +159,7 @@ const RenderImageInput = ({ fieldName, that }) => (
       )}
     </View>
     <Button
-      backgroundColor={colors.secondary}
+      secondary
       title={`${that.state[fieldName] ? "Change" : "Upload"} ${capitalize(
         fieldName
       )}`}
