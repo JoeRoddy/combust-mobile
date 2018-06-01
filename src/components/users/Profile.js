@@ -14,7 +14,7 @@ import { observer } from "mobx-react";
 import { viewStyles, textStyles } from "../../assets/styles/AppStyles";
 import userStore from "../../stores/UserStore";
 import nav from "../../helpers/NavigatorHelper";
-import { Avatar, Header } from "../reusable";
+import { Avatar, Screen } from "../reusable";
 
 @observer
 export default class Profile extends Component {
@@ -36,15 +36,18 @@ export default class Profile extends Component {
     const user = userStore.getUserById(userId);
 
     return user ? (
-      <View style={{ flex: 1 }}>
-        <Header title={user.displayName || "Profile"} />
+      <Screen
+        title={user.displayName || "Profile"}
+        style={{ flex: 1, padding: 0 }}
+        containerStyle={{ flex: 1 }}
+      >
         <ScrollView>
           <CoverPhoto />
           <UserActionBar that={this} userId={userId} />
           <AvatarAndName user={user} />
           <ExamplePosts user={user} />
         </ScrollView>
-      </View>
+      </Screen>
     ) : (
       <View />
     );
@@ -75,7 +78,9 @@ const AvatarAndName = ({ user }) => (
         justifyContent: "center"
       }}
     >
-      <Text style={[styles.text, { marginBottom: 8 }]}>{user.displayName}</Text>
+      <Text style={[styles.displayName, { marginBottom: 8 }]}>
+        {user.displayName}
+      </Text>
     </View>
   </View>
 );
@@ -159,13 +164,12 @@ const styles = StyleSheet.create({
   coverImage: {
     marginTop: 130
   },
-  text: {
+  displayName: {
     color: "white",
     fontSize: 22,
     textShadowColor: "black",
     textShadowOffset: { width: 1, height: 1 }
   },
-  profileCover: {},
   iconAndName: {
     flexDirection: "row",
     position: "absolute",
@@ -179,17 +183,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     paddingRight: 15
-  },
-  accountsBar: {
-    height: 60,
-    backgroundColor: "#212121",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  accountDetails: {
-    flexDirection: "row",
-    padding: 15
   },
   rowCentered: {
     flexDirection: "row",

@@ -16,7 +16,7 @@ import { stores } from "../.combust/init";
 import welcomeStore from "../stores/WelcomeStore";
 import userStore from "../stores/UserStore";
 import nav from "../helpers/NavigatorHelper";
-import { Button, Header } from "./reusable";
+import { Button, Screen } from "./reusable";
 
 @observer
 export default class Welcome extends React.Component {
@@ -30,19 +30,16 @@ export default class Welcome extends React.Component {
     const user = userStore.user;
 
     return (
-      <View style={{ flex: 1 }}>
-        <Header title="Welcome" />
-        <View style={[viewStyles.padding, { flex: 1 }]}>
-          {!firebaseConfigured && <ConfigureFirebase />}
-          {firebaseConfigured && !emailAuthEnabled && <EnableAuthentication />}
-          {firebaseConfigured &&
-            emailAuthEnabled &&
-            !user && <CreateInitialUser />}
-          {firebaseConfigured &&
-            emailAuthEnabled &&
-            user && <ExecuteGenerate user={user} />}
-        </View>
-      </View>
+      <Screen title="Welcome">
+        {!firebaseConfigured && <ConfigureFirebase />}
+        {firebaseConfigured && !emailAuthEnabled && <EnableAuthentication />}
+        {firebaseConfigured &&
+          emailAuthEnabled &&
+          !user && <CreateInitialUser />}
+        {firebaseConfigured &&
+          emailAuthEnabled &&
+          user && <ExecuteGenerate user={user} />}
+      </Screen>
     );
   }
 }

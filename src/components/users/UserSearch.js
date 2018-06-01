@@ -5,7 +5,7 @@ import { Icon, FormInput } from "react-native-elements";
 
 import userDb from "../../db/UserDb";
 import nav from "../../helpers/NavigatorHelper";
-import { Header } from "../reusable";
+import { Screen } from "../reusable";
 import UserList from "../users/UserList";
 
 export default class UserSearch extends Component {
@@ -21,8 +21,7 @@ export default class UserSearch extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <Header title="Find Users" />
+      <Screen title="Find Users" noPadding>
         <FormInput
           placeholder="Search for users.."
           onChangeText={this.handleQuery}
@@ -38,7 +37,7 @@ export default class UserSearch extends Component {
             nav.navigate("Profile", { id: user.id });
           }}
         />
-      </View>
+      </Screen>
     );
   }
 }

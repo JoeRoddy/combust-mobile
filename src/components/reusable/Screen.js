@@ -2,21 +2,29 @@ import React, { Fragment } from "react";
 import { View } from "react-native";
 import PropTypes from "prop-types";
 
-import { Header } from "../reusable";
+import { Header } from "./";
 
-export default (Screen = ({ children, title }) => {
+export default (Screen = ({
+  children,
+  title,
+  containerStyle,
+  style,
+  noPadding
+}) => {
   return (
-    <Fragment>
+    <View style={containerStyle}>
       <Header title={title} />
-      <View style={{ padding: 10 }}>{children}</View>
-    </Fragment>
+      <View style={[{ padding: noPadding ? 0 : 10 }, style]}>{children}</View>
+    </View>
   );
 });
 
 Screen.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
-  ])
+  ]),
+  noPadding: PropTypes.bool,
+  style: PropTypes.object
 };
