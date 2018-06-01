@@ -56,9 +56,8 @@ export default class Login extends Component {
           fields={fields}
         />
         <Button
-          raised
-          backgroundColor={colors.secondary}
           title="Create an Account"
+          success
           onPress={e => nav.navigate("Register")}
         />
         {this.state.errMsg && (

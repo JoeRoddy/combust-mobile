@@ -51,8 +51,7 @@ export default class Register extends Component {
         />
         <Button
           title="Login Instead"
-          raised
-          backgroundColor={colors.secondary}
+          secondary
           onPress={e => nav.navigate("Login")}
         />
         {this.state.errMessage && (
