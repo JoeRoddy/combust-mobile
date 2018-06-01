@@ -28,6 +28,8 @@ export default class Form extends Component {
         if (val || val === false) {
           val = fields[field] === "number" ? parseInt(val, 0) : val;
           formData[camelCase(field)] = val;
+        } else if (fields[field] === "boolean") {
+          formData[camelCase(field)] = false; //bools false by default
         }
       });
     onSubmit(formData);
@@ -119,7 +121,7 @@ const RenderInputFieldForDataType = props => {
 
 const RenderStringInput = ({ fieldName, that }) => (
   <FormInput
-    placeholder={fieldName}
+    placeholder={prettyCase(fieldName)}
     onChangeText={newVal => that.setState({ [fieldName]: newVal })}
     secureTextEntry={fieldName.toLowerCase() === "password"}
     onSubmitEditing={Keyboard.dismiss}
@@ -130,7 +132,7 @@ const RenderStringInput = ({ fieldName, that }) => (
 const RenderNumberInput = ({ fieldName, that }) => (
   <FormInput
     keyboardType="numeric"
-    placeholder={fieldName}
+    placeholder={prettyCase(fieldName)}
     onChangeText={newVal => that.setState({ [fieldName]: newVal })}
     secureTextEntry={fieldName.toLowerCase() === "password"}
     onSubmitEditing={Keyboard.dismiss}
@@ -142,7 +144,7 @@ const RenderBooleanInput = ({ fieldName, that }) => {
   const isChecked = that.state[fieldName] || false;
   return (
     <CheckBox
-      title={fieldName}
+      title={prettyCase(fieldName)}
       checked={isChecked}
       onPress={() => {
         that.setState({ [fieldName]: !isChecked });
@@ -156,7 +158,7 @@ const RenderImageInput = ({ fieldName, that }) => (
     <View style={{ marginLeft: 25 }}>
       {that.state[fieldName + "_uploadStatus"] && (
         <Text>
-          {fieldName}: {that.state[fieldName + "_uploadStatus"]}
+          {prettyCase(fieldName)}: {that.state[fieldName + "_uploadStatus"]}
         </Text>
       )}
       {that.state[fieldName] && (
@@ -168,7 +170,7 @@ const RenderImageInput = ({ fieldName, that }) => (
     </View>
     <Button
       secondary
-      title={`${that.state[fieldName] ? "Change" : "Upload"} ${capitalize(
+      title={`${that.state[fieldName] ? "Change" : "Upload"} ${prettyCase(
         fieldName
       )}`}
       onPress={() => that.uploadImage(fieldName)}
@@ -183,6 +185,14 @@ const styles = StyleSheet.create({
     marginLeft: 20
   }
 });
+
+const prettyCase = str => {
+  if (!str.includes(" ")) {
+    str = str.replace(/([A-Z])/g, " $1");
+    str = str.charAt(0).toUpperCase() + str.slice(1);
+  }
+  return str;
+};
 
 const camelCase = str => {
   if (str.includes(" ")) {
