@@ -3,9 +3,9 @@ import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
 import { Text } from "react-native-elements";
 import { observer } from "mobx-react";
 
+import nav from "../../helpers/NavigatorHelper";
 import userStore from "../../stores/UserStore";
 import { Button, Form } from "../reusable";
-import nav from "../../helpers/NavigatorHelper";
 import { colors } from "../../assets/styles/AppStyles";
 
 const safeErrorCodes = {
@@ -57,7 +57,7 @@ export default class Login extends Component {
         />
         <Button
           title="Create an Account"
-          success
+          secondary
           onPress={e => nav.navigate("Register")}
         />
         {this.state.errMsg && (
