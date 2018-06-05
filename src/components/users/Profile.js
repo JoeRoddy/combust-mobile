@@ -85,7 +85,7 @@ const AvatarAndName = ({ user }) => (
   </View>
 );
 
-const UserActionBar = ({ that, userId }) => {
+const UserActionBar = observer(({ that, userId }) => {
   const isMyProfile = userId === userStore.userId;
   const friendType = null;
   const isFollowed = false;
@@ -124,7 +124,7 @@ const UserActionBar = ({ that, userId }) => {
       )}
     </View>
   );
-};
+});
 
 const BarAction = ({ text, icon, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.rowCentered}>
