@@ -155,7 +155,7 @@ const alert = (title, message, onPress) => {
   Alert.alert(
     title,
     message,
-    [{ text: "OK", onPress: typeof onPress === "funcion" ? onPress : null }],
+    [{ text: "OK", onPress: typeof onPress === "function" ? onPress : null }],
     {
       cancelable: false
     }
