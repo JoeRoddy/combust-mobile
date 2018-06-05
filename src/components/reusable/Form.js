@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Keyboard, Image } from "react-native";
 import { FormInput, Text, CheckBox } from "react-native-elements";
 
-import Button from "../reusable/Button";
+import { Button, TextArea } from "../reusable";
 import { colors } from "../../assets/styles/AppStyles";
 import { uploadImgAndGetUrl } from "../../helpers/ImageHelper";
 
@@ -92,7 +92,7 @@ export default class Form extends Component {
           success
           title={submitText || "Submit"}
           onPress={this.submitForm}
-          containerViewStyle={{ marginTop: 10, marginBottom: 10 }}
+          containerViewStyle={[{ marginVertical: 10 }, submitStyle]}
         />
         {onCancel && (
           <Button danger title={cancelText || "Cancel"} onPress={onCancel} />
@@ -114,6 +114,8 @@ const RenderInputFieldForDataType = props => {
       return <RenderNumberInput {...props} />;
     case "boolean":
       return <RenderBooleanInput {...props} />;
+    case "text":
+      return <RenderTextAreaInput {...props} />;
     default:
       return <RenderStringInput {...props} />;
   }
@@ -126,6 +128,16 @@ const RenderStringInput = ({ fieldName, that }) => (
     secureTextEntry={fieldName.toLowerCase() === "password"}
     onSubmitEditing={Keyboard.dismiss}
     value={that.getInputValue(fieldName)}
+  />
+);
+
+const RenderTextAreaInput = ({ fieldName, that }) => (
+  <TextArea
+    placeholder={prettyCase(fieldName)}
+    onChangeText={newVal => that.setState({ [fieldName]: newVal })}
+    onSubmitEditing={Keyboard.dismiss}
+    value={that.getInputValue(fieldName)}
+    maxHeight={150}
   />
 );
 
