@@ -67,6 +67,7 @@ export default class Header extends Component {
             }}
             backgroundColor={colors.primary}
             outerContainerStyles={{ height: 80 }}
+            {...this.props}
           />
         )}
       </View>
