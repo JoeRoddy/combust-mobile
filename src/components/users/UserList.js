@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { View, ScrollView } from "react-native";
 import { List, ListItem } from "react-native-elements";
 
-export default (UserList = observer(({ users, onUserClicked }) => {
+export default (UserList = observer(({ users, onUserPressed }) => {
   const userArr = typeof users === "array" ? users : Object.values(users);
 
   return (
@@ -17,7 +17,7 @@ export default (UserList = observer(({ users, onUserClicked }) => {
                 avatar={{ uri: user.iconUrl }}
                 roundAvatar
                 title={user.displayName}
-                onPress={() => onUserClicked(user)}
+                onPress={() => onUserPressed(user)}
                 underlayColor="#edeff2"
                 rightIcon={
                   <View

@@ -32,7 +32,7 @@ export default class UserSearch extends Component {
         <UserList
           title="Friends"
           users={this.state.results}
-          onUserClicked={user => {
+          onUserPressed={user => {
             Keyboard.dismiss();
             nav.navigate("Profile", { id: user.id });
           }}
