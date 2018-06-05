@@ -100,26 +100,32 @@ const UserActionBar = observer(({ that, userId }) => {
         icon="chat"
         onPress={() => that.openConversationWithUser(userId)}
       />
-      {!isFollowed && (
+      {isFollowed ? (
+        <View style={styles.rowCentered}>
+          <Icon name="done" color={colors.success} size={13} />
+          <Text style={styles.actionBarText}>Following</Text>
+        </View>
+      ) : (
         <BarAction
           text="Follow"
           icon="person-add"
           onPress={() => that.followUser(userId)}
         />
       )}
-      {(!friendType || friendType === "non_friend") && (
+      {!friendType || friendType === "non_friend" ? (
         <BarAction
           text="Add Friend"
           icon="person-add"
           onPress={() => that.sendFriendRequest(userId)}
         />
-      )}
-      {(friendType === "friend" || friendType === "pending") && (
+      ) : (
         <View style={styles.rowCentered}>
-          <Text>{friendType === "friend" ? "Friends" : "Request Sent"}</Text>
           {friendType === "friend" && (
-            <Icon name="done" color={colors.success} />
+            <Icon name="done" color={colors.success} size={13} />
           )}
+          <Text style={styles.actionBarText}>
+            {friendType === "friend" ? "Friends" : "Request Sent"}
+          </Text>
         </View>
       )}
     </View>
@@ -129,7 +135,7 @@ const UserActionBar = observer(({ that, userId }) => {
 const BarAction = ({ text, icon, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.rowCentered}>
     <Icon name={icon} color="black" size={15} />
-    <Text style={{ marginLeft: 5, fontSize: 15 }}>{text}</Text>
+    <Text style={styles.actionBarText}>{text}</Text>
   </TouchableOpacity>
 );
 
@@ -185,6 +191,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     paddingRight: 15
+  },
+  actionBarText: {
+    fontSize: 15,
+    marginLeft: 1
   },
   rowCentered: {
     flexDirection: "row",
