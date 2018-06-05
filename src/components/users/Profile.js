@@ -11,7 +11,7 @@ import {
 import { Button, Icon, Card } from "react-native-elements";
 import { observer } from "mobx-react";
 
-import { viewStyles, textStyles } from "../../assets/styles/AppStyles";
+import { viewStyles, textStyles, colors } from "../../assets/styles/AppStyles";
 import userStore from "../../stores/UserStore";
 import nav from "../../helpers/NavigatorHelper";
 import { Avatar, Screen } from "../reusable";
@@ -87,7 +87,7 @@ const AvatarAndName = ({ user }) => (
 
 const UserActionBar = ({ that, userId }) => {
   const isMyProfile = userId === userStore.userId;
-  const isFriend = false;
+  const friendType = null;
   const isFollowed = false;
   return isMyProfile ? (
     <View style={styles.actionBar}>
@@ -107,17 +107,19 @@ const UserActionBar = ({ that, userId }) => {
           onPress={() => that.followUser(userId)}
         />
       )}
-      {!isFriend && (
+      {(!friendType || friendType === "non_friend") && (
         <BarAction
           text="Add Friend"
           icon="person-add"
           onPress={() => that.sendFriendRequest(userId)}
         />
       )}
-      {isFriend && (
+      {(friendType === "friend" || friendType === "pending") && (
         <View style={styles.rowCentered}>
-          <Text>Friends</Text>
-          <Icon name="done" color="#009e51" />
+          <Text>{friendType === "friend" ? "Friends" : "Request Sent"}</Text>
+          {friendType === "friend" && (
+            <Icon name="done" color={colors.success} />
+          )}
         </View>
       )}
     </View>
