@@ -73,7 +73,11 @@ class UserDb {
               data.id = userAuth.uid;
               callback(null, data);
             });
-          } else if (!snap.exists() && userAuth.providerData) {
+          } else if (
+            !snap.exists() &&
+            userAuth.providerData &&
+            userAuth.providerData[0].providerId !== "password"
+          ) {
             _createUserFromThirdPartyAuth(userAuth, callback);
           }
         });
