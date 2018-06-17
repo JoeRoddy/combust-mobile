@@ -1,38 +1,82 @@
 import React from "react";
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Linking,
-  Image,
-  ScrollView
-} from "react-native";
+import { Linking, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Card } from "react-native-elements";
 import { observer } from "mobx-react";
+import firebase from "firebase/app";
+import "firebase/database";
+import "firebase/auth";
 
-import { textStyles, viewStyles } from "../assets/styles/AppStyles";
-import { stores } from "../.combust/init";
-import welcomeStore from "../stores/WelcomeStore";
+import { textStyles } from "../assets/styles/AppStyles";
+import { storeItem, getItem } from "../helpers/CacheHelper";
 import userStore from "../stores/UserStore";
 import nav from "../helpers/NavigatorHelper";
 import { Button, Screen } from "./reusable";
 
 @observer
 export default class Welcome extends React.Component {
+  state = {
+    firebaseConfigured: false,
+    emailAuthEnabled: false,
+    friendsAdded: false,
+    projectId: null
+  };
+
   componentDidMount() {
-    welcomeStore.isFirebaseConfigured();
-    welcomeStore.isEmailAuthEnabled();
+    this.isFirebaseConfigured(this.isEmailAuthEnabled);
+  }
+
+  isFirebaseConfigured(callback) {
+    try {
+      firebase.database();
+      const projectId = firebase.app().options.projectId;
+      this.setState({ firebaseConfigured: true, projectId }, callback);
+    } catch (err) {
+      this.setState({ firebaseConfigured: false }, callback);
+    }
+  }
+
+  isEmailAuthEnabled() {
+    if (!this.state.firebaseConfigured) return;
+    const authEnabledForApp =
+      firebase.app().options.projectId + "_emailAuthEnabled";
+
+    getItem(authEnabledForApp, (err, emailAuthVerified) => {
+      if (emailAuthVerified) {
+        return this.setState({ emailAuthEnabled: true });
+      }
+
+      const testEmail = "comsttests@combust.com";
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(testEmail, "sparky")
+        .then(() => {
+          storeItem(authEnabledForApp, true);
+          this.setState({ emailAuthEnabled: true });
+        })
+        .catch(err => {
+          this.setState({
+            emailAuthEnabled: err.code === "auth/email-alrady-in-use"
+          });
+          storeItem(authEnabledForApp, this.state.emailAuthEnabled);
+        })
+        .then(() => {
+          const user = firebase.auth().currentUser;
+          if (user && user.email === testEmail) {
+            user.delete();
+          }
+        });
+    });
   }
 
   render() {
-    const { firebaseConfigured, emailAuthEnabled, projectId } = welcomeStore;
+    const { emailAuthEnabled, firebaseConfigured, projectId } = this.state;
     const user = userStore.user;
 
     return (
       <Screen title="Welcome">
         {!firebaseConfigured && <ConfigureFirebase />}
-        {firebaseConfigured && !emailAuthEnabled && <EnableAuthentication />}
+        {firebaseConfigured &&
+          !emailAuthEnabled && <EnableAuthentication projectId={projectId} />}
         {firebaseConfigured &&
           emailAuthEnabled &&
           !user && <CreateInitialUser />}
@@ -80,7 +124,7 @@ const ConfigureFirebase = () => {
   );
 };
 
-const EnableAuthentication = () => {
+const EnableAuthentication = ({ projectId }) => {
   return (
     <View>
       <Text>Awesome, looks like firebase is hooked up.</Text>
