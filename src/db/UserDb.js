@@ -104,8 +104,7 @@ class UserDb {
       res => {
         callback(null, res);
         const { uid } = res.user;
-        db
-          .ref("users/publicInfo")
+        db.ref("users/publicInfo")
           .child(uid)
           .update({
             isOnline: true
@@ -285,7 +284,7 @@ const _createUserFromThirdPartyAuth = function(authInfo, callback) {
     lastOnline: timeNow,
     isOnline: true
   };
-  userDataByPrivacy = {
+  const userDataByPrivacy = {
     publicInfo,
     privateInfo: _getPrivateUserObject(),
     serverInfo: _getServerUserObject()
