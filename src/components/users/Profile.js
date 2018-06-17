@@ -66,12 +66,7 @@ const CoverPhoto = () => (
 
 const AvatarAndName = ({ user }) => (
   <View style={styles.iconAndName}>
-    <Avatar
-      size={80}
-      online={user.isOnline}
-      src={user.iconUrl}
-      icon={user.isOnline ? "online" : "offline"}
-    />
+    <Avatar size={80} online={user.isOnline} src={user.iconUrl} />
     <View
       style={{
         marginLeft: 10,
