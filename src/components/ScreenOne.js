@@ -10,7 +10,7 @@ import { Button, Header, Screen } from "./reusable";
 export default class ScreenOne extends React.Component {
   render() {
     return (
-      <Screen title="Screen 1">
+      <Screen title="Screen One">
         <Text style={styles.margin}>
           Example screen 1 content. Open it up and start exploring!
         </Text>
