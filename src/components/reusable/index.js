@@ -1,5 +1,5 @@
 // allows cleaner imports, for example:
-// import {Avatar, Form, Button} from "../reusable";
+// import {Avatar, Button, Form} from "../reusable";
 
 export { default as Avatar } from "./Avatar";
 export { default as Button } from "./Button";

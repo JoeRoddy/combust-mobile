@@ -1,7 +1,7 @@
 import React from "react";
 import firebase from "firebase/app";
 
-import { firebaseConfig } from "./src/.combust/config";
+import firebaseConfig from "./src/.combust/firebase.config.json";
 import { initializeStores } from "./src/.combust/init";
 import nav from "./src/helpers/NavigatorHelper";
 import Routes from "./src/components/Routes";

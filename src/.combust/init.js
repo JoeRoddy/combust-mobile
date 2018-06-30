@@ -1,5 +1,5 @@
 import userStore from "../stores/UserStore";
-import { firebaseConfig } from "./config";
+import firebaseConfig from "./firebase.config.json";
 
 export const stores = {
   userStore
