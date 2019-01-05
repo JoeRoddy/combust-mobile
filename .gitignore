@@ -4,6 +4,7 @@
 .expo/
 
 # dependencies
+yarn.lock
 /node_modules
 
 # misc
