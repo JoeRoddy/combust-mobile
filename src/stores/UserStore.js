@@ -2,11 +2,11 @@ import { observable, computed } from "mobx";
 import userDb from "../db/UserDb";
 
 class UserStore {
-  @observable userId = null;
-  @observable usersMap = new Map();
+  userId = observable(null);
+  usersMap = observable.map();
 
-  @observable privateInfo = null; //only reads/writes by user
-  @observable serverInfo = null; //only user reads, only server writes
+  privateInfo = observable(null); //only reads/writes by user
+  serverInfo = observable(null); //only user reads, only server writes
 
   init() {
     _listenToCurrentUser();
@@ -28,20 +28,16 @@ class UserStore {
     _onLogoutTriggers.push(callback);
   }
 
-  @computed
-  get user() {
-    return this.usersMap.get(this.userId);
-  }
+  user = computed(() => this.usersMap.get(this.userId));
 
-  @computed
-  get fullUser() {
+  fullUser = computed(() => {
     return {
       id: this.userId,
       public: this.user,
       private: this.privateInfo,
       server: this.serverInfo
     };
-  }
+  });
 
   /**
    * returns the public user info from a given user id

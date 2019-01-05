@@ -6,8 +6,7 @@ import { observer } from "mobx-react";
 import { colors } from "../../assets/styles/AppStyles";
 import nav from "../../helpers/NavigatorHelper";
 
-@observer
-export default class Header extends Component {
+class Header extends Component {
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.goBack);
   }
@@ -74,6 +73,9 @@ export default class Header extends Component {
     );
   }
 }
+
+export default observer(Header);
+
 const styles = StyleSheet.create({
   container: {
     height: 80

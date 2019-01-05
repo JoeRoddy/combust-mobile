@@ -2,9 +2,9 @@ import React from "react";
 import { Linking, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Card } from "react-native-elements";
 import { observer } from "mobx-react";
-import firebase from "firebase/app";
-import "firebase/database";
-import "firebase/auth";
+import firebase from "@firebase/app";
+import "@firebase/database";
+import "@firebase/auth";
 
 import { textStyles } from "../assets/styles/AppStyles";
 import { storeItem, getItem } from "../helpers/CacheHelper";
@@ -12,8 +12,7 @@ import userStore from "../stores/UserStore";
 import nav from "../helpers/NavigatorHelper";
 import { Button, Screen } from "./reusable";
 
-@observer
-export default class Welcome extends React.Component {
+class Welcome extends React.Component {
   state = {
     firebaseConfigured: false,
     emailAuthEnabled: false,
@@ -69,24 +68,22 @@ export default class Welcome extends React.Component {
   }
 
   render() {
-    const { emailAuthEnabled, firebaseConfigured, projectId } = this.state;
+    const { emailAuthEnabled, firebaseConfigured: fb, projectId } = this.state;
     const user = userStore.user;
 
+    const phase = !fb ? 1 : !emailAuthEnabled ? 2 : user ? 3 : 4;
     return (
       <Screen title="Welcome">
-        {!firebaseConfigured && <ConfigureFirebase />}
-        {firebaseConfigured &&
-          !emailAuthEnabled && <EnableAuthentication projectId={projectId} />}
-        {firebaseConfigured &&
-          emailAuthEnabled &&
-          !user && <CreateInitialUser />}
-        {firebaseConfigured &&
-          emailAuthEnabled &&
-          user && <ExecuteGenerate user={user} />}
+        {phase === 1 && <ConfigureFirebase />}
+        {phase === 2 && <EnableAuthentication projectId={projectId} />}
+        {phase === 3 && <CreateInitialUser />}
+        {phase === 4 && <ExecuteGenerate user={user} />}
       </Screen>
     );
   }
 }
+
+export default observer(Welcome);
 
 const styles = StyleSheet.create({});
 

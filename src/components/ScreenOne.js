@@ -6,8 +6,7 @@ import { viewStyles, textStyles } from "../assets/styles/AppStyles";
 import nav from "../helpers/NavigatorHelper";
 import { Button, Header, Screen } from "./reusable";
 
-@observer
-export default class ScreenOne extends React.Component {
+class ScreenOne extends React.Component {
   render() {
     return (
       <Screen title="Screen One">
@@ -26,6 +25,8 @@ export default class ScreenOne extends React.Component {
     );
   }
 }
+
+export default observer(ScreenOne);
 
 const styles = StyleSheet.create({
   margin: {

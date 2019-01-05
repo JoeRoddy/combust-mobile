@@ -5,8 +5,7 @@ import { observer } from "mobx-react";
 import { viewStyles, textStyles } from "../assets/styles/AppStyles";
 import { Header, Screen } from "./reusable";
 
-@observer
-export default class ScreenTwo extends React.Component {
+class ScreenTwo extends React.Component {
   render() {
     return (
       <Screen title="Screen Two">
@@ -18,6 +17,8 @@ export default class ScreenTwo extends React.Component {
     );
   }
 }
+
+export default observer(ScreenTwo);
 
 const styles = StyleSheet.create({
   margin: {

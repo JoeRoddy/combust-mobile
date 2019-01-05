@@ -19,8 +19,7 @@ const fields = {
   Password: "string"
 };
 
-@observer
-export default class Login extends Component {
+class Login extends Component {
   state = {
     email: "",
     password: "",
@@ -71,6 +70,8 @@ export default class Login extends Component {
     );
   }
 }
+
+export default observer(Login);
 
 const styles = StyleSheet.create({
   view: {

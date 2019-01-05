@@ -1,5 +1,5 @@
-import firebase from "firebase/app";
-import "firebase/storage";
+import firebase from "@firebase/app";
+import "@firebase/storage";
 
 export const uploadImageAsync = async function(uri, documentFolder) {
   const response = await fetch(uri);

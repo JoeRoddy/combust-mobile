@@ -16,8 +16,7 @@ import userStore from "../../stores/UserStore";
 import nav from "../../helpers/NavigatorHelper";
 import { Avatar, Screen } from "../reusable";
 
-@observer
-export default class Profile extends Component {
+class Profile extends Component {
   openConversationWithUser = userId => {
     alert("Execute from your terminal:", "combust install chat");
   };
@@ -53,6 +52,8 @@ export default class Profile extends Component {
     );
   }
 }
+
+export default observer(Profile);
 
 const CoverPhoto = () => (
   <Image

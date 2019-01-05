@@ -13,8 +13,7 @@ const fields = {
   Password: "string"
 };
 
-@observer
-export default class Register extends Component {
+class Register extends Component {
   state = {
     errMessage: null
   };
@@ -63,6 +62,8 @@ export default class Register extends Component {
     );
   }
 }
+
+export default observer(Register);
 
 const styles = StyleSheet.create({
   view: {
