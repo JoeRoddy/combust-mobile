@@ -5,9 +5,9 @@ import firebase from "@firebase/app";
 import firebaseConfig from "./.combust/firebase.config.json";
 import { initializeStores } from "./.combust/init";
 import nav from "./helpers/NavigatorHelper";
-import Routes from "./components/Routes";
+import Routes from "./Routes";
 
-YellowBox.ignoreWarnings(["Setting a timer"]); // swallow react native + firebase warning bug
+YellowBox.ignoreWarnings(["Setting a timer", "Require cycle"]); // swallow react native + firebase warning bug
 
 firebaseConfig &&
   firebaseConfig.projectId &&
