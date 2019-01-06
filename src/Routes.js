@@ -1,13 +1,13 @@
 import { createDrawerNavigator } from "react-navigation";
 
-import Welcome from "./Welcome";
-import SideMenu from "./reusable/SideMenu";
-import Login from "./users/Login";
-import Register from "./users/Register";
-import Profile from "./users/Profile";
-import UserSearch from "./users/UserSearch";
-import ScreenOne from "./ScreenOne";
-import ScreenTwo from "./ScreenTwo";
+import Welcome from "./components/Welcome";
+import SideMenu from "./components/reusable/SideMenu";
+import Login from "./components/users/Login";
+import Register from "./components/users/Register";
+import Profile from "./components/users/Profile";
+import UserSearch from "./components/users/UserSearch";
+import ScreenOne from "./components/ScreenOne";
+import ScreenTwo from "./components/ScreenTwo";
 
 const SCREENS = {
   Home: { screen: Welcome, path: "/Home" },
