@@ -3,9 +3,9 @@ import { observer } from "mobx-react";
 import { View, StyleSheet, Text } from "react-native";
 import { List, ListItem } from "react-native-elements";
 
-import nav from "../../helpers/NavigatorHelper";
+import nav from "../../helpers/navigatorHelper";
 import { colors } from "../../assets/styles/AppStyles";
-import userStore from "../../stores/UserStore";
+import userStore from "../../stores/userStore";
 import Avatar from "./Avatar";
 
 export default (SideMenu = observer(() => {

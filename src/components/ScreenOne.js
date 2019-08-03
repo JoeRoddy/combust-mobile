@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { observer } from "mobx-react";
 
 import { viewStyles, textStyles } from "../assets/styles/AppStyles";
-import nav from "../helpers/NavigatorHelper";
+import nav from "../helpers/navigatorHelper";
 import { Button, Header, Screen } from "./reusable";
 
 class ScreenOne extends React.Component {

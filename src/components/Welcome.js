@@ -7,9 +7,9 @@ import "@firebase/database";
 import "@firebase/auth";
 
 import { textStyles, viewStyles } from "../assets/styles/AppStyles";
-import { storeItem, getItem } from "../helpers/CacheHelper";
-import userStore from "../stores/UserStore";
-import nav from "../helpers/NavigatorHelper";
+import { storeItem, getItem } from "../helpers/cacheHelper";
+import userStore from "../stores/userStore";
+import nav from "../helpers/navigatorHelper";
 import { Button, Screen } from "./reusable";
 
 class Welcome extends React.Component {

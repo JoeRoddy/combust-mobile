@@ -2,12 +2,16 @@ import React from "react";
 import { YellowBox } from "react-native";
 import firebase from "@firebase/app";
 
-import firebaseConfig from "./.combust/firebase.config.json";
-import { initializeStores } from "./.combust/init";
-import nav from "./helpers/NavigatorHelper";
+import firebaseConfig from "./db/firebase.config.json";
+import { initializeStores } from "./stores/init";
+import nav from "./helpers/navigatorHelper";
 import Routes from "./Routes";
 
-YellowBox.ignoreWarnings(["Setting a timer", "Require cycle"]); // swallow react native + firebase warning bug
+YellowBox.ignoreWarnings([
+  "Setting a timer",
+  "Require cycle",
+  "Overwriting FirebaseError"
+]); // swallow react native + firebase warning bugs
 
 firebaseConfig &&
   firebaseConfig.projectId &&

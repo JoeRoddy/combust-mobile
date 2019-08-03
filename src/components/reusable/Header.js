@@ -4,7 +4,7 @@ import { Icon, Header as RneHeader } from "react-native-elements";
 import { observer } from "mobx-react";
 
 import { colors } from "../../assets/styles/AppStyles";
-import nav from "../../helpers/NavigatorHelper";
+import nav from "../../helpers/navigatorHelper";
 
 class Header extends Component {
   componentDidMount() {

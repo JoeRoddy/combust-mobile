@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { View, StyleSheet, Text, KeyboardAvoidingView } from "react-native";
 import { observer } from "mobx-react";
 
-import userStore from "../../stores/UserStore";
-import nav from "../../helpers/NavigatorHelper";
+import userStore from "../../stores/userStore";
+import nav from "../../helpers/navigatorHelper";
 import { colors } from "../../assets/styles/AppStyles";
 import { Button, Form } from "../reusable";
 

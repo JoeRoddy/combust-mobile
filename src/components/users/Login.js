@@ -3,8 +3,8 @@ import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
 import { Text } from "react-native-elements";
 import { observer } from "mobx-react";
 
-import nav from "../../helpers/NavigatorHelper";
-import userStore from "../../stores/UserStore";
+import nav from "../../helpers/navigatorHelper";
+import userStore from "../../stores/userStore";
 import { Button, Form } from "../reusable";
 import { colors } from "../../assets/styles/AppStyles";
 

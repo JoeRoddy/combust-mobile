@@ -1,6 +1,6 @@
 // import { ImagePicker } from "expo";
 
-import { uploadImageAsync } from "../db/FileDb";
+import { uploadImageAsync } from "../db/fileDb";
 
 export async function uploadImgAndGetUrl(documentFolder, progressCallback) {
   // TODO:

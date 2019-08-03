@@ -3,8 +3,8 @@ import { observer } from "mobx-react";
 import { View, Keyboard } from "react-native";
 import { Icon, FormInput } from "react-native-elements";
 
-import userDb from "../../db/UserDb";
-import nav from "../../helpers/NavigatorHelper";
+import userDb from "../../db/userDb";
+import nav from "../../helpers/navigatorHelper";
 import { Screen } from "../reusable";
 import UserList from "../users/UserList";
 

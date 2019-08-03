@@ -2,7 +2,7 @@ import firebase from "@firebase/app";
 import "@firebase/database";
 import "@firebase/auth";
 
-import userStore from "../stores/UserStore";
+import userStore from "../stores/userStore";
 
 class UserDb {
   createUser(user, callback) {

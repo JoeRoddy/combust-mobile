@@ -4,7 +4,7 @@ import { FormInput, Text, CheckBox } from "react-native-elements";
 
 import { Button, TextArea } from "../reusable";
 import { colors } from "../../assets/styles/AppStyles";
-import { uploadImgAndGetUrl } from "../../helpers/ImageHelper";
+import { uploadImgAndGetUrl } from "../../helpers/imageHelper";
 
 export default class Form extends Component {
   state = {};
@@ -54,10 +54,10 @@ export default class Form extends Component {
     return this.state[field] != null
       ? this.state[field]
       : defaultValues && defaultValues[field]
-        ? defaultValues[field]
-        : defaultValues && defaultValues[cameled]
-          ? defaultValues[cameled]
-          : "";
+      ? defaultValues[field]
+      : defaultValues && defaultValues[cameled]
+      ? defaultValues[cameled]
+      : "";
   };
 
   render() {

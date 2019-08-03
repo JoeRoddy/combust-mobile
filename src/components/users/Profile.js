@@ -12,8 +12,8 @@ import { Button, Icon, Card } from "react-native-elements";
 import { observer } from "mobx-react";
 
 import { viewStyles, textStyles, colors } from "../../assets/styles/AppStyles";
-import userStore from "../../stores/UserStore";
-import nav from "../../helpers/NavigatorHelper";
+import userStore from "../../stores/userStore";
+import nav from "../../helpers/navigatorHelper";
 import { Avatar, Screen } from "../reusable";
 
 class Profile extends Component {
