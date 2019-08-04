@@ -43,6 +43,7 @@ class UserStore {
 
   /**
    * returns the public user info from a given user id
+   * & applies a listener to their data
    * @param {string} userId
    */
   getUserById(userId) {
@@ -69,6 +70,7 @@ class UserStore {
    * logs out the current user
    */
   logout() {
+    _handleUserLogout();
     userDb.logout(this.user);
     this.userId = null;
   }
@@ -81,15 +83,14 @@ class UserStore {
    * @param {string} user.password
    * @param {function} callback
    */
-  createUser(user, callback) {
+  createUserWithEmail(user, callback) {
     if (!user || !user.email || !user.password) {
-      debugger;
       return callback({
         message: "You must provide an email and password"
       });
     }
 
-    userDb.createUser(user, (err, userDataByPrivacy) => {
+    userDb.createUserWithEmail(user, (err, userDataByPrivacy) => {
       if (err) return callback(err);
       _saveCurrentUserLocally(userDataByPrivacy);
       callback(err, userDataByPrivacy);
@@ -97,22 +98,22 @@ class UserStore {
   }
 
   /**
-   * find a user already stored in memory by a specific field
-   * @param {string} field
+   * find a user by a publicInfo field
    * @param {string} query
+   * @param {string} field
    */
-  searchFromLocalUsersByField(field, query) {
-    let results = [];
-    this.usersMap.entries().forEach(([uid, user]) => {
-      if (
-        user &&
-        typeof user[field] === "string" &&
-        user[field].toUpperCase().includes(query.toUpperCase())
-      ) {
-        results.push(user);
+  async searchByField(query, field) {
+    let results = await userDb.searchByField(query, field);
+    results = results || {};
+    let formattedResults = [];
+    Object.keys(results).forEach(uid => {
+      if (uid !== this.userId) {
+        this.getUserById(uid); // apply a listener
+        const formattedUser = _savePublicUserInfo(uid, results[uid]);
+        formattedResults.push(formattedUser);
       }
     });
-    return results;
+    return formattedResults;
   }
 
   /**
@@ -144,15 +145,12 @@ let _onLogoutTriggers = [];
 const _listenToCurrentUser = function() {
   userDb.listenToCurrentUser((err, userData) => {
     if (err) {
-      debugger;
-      return;
-    } else if (!userData) {
+      return console.log(err);
+    } else if (!userData && userStore.userId) {
       //user logged out
-      if (userStore.userId) {
-        _handleUserLogout();
-      }
+      _handleUserLogout();
       userStore.userId = null;
-    } else {
+    } else if (userData) {
       //new data
       let shouldExecEstablished = !userStore.user && userData.publicInfo;
       _saveCurrentUserLocally(userData);
@@ -227,4 +225,5 @@ const _savePublicUserInfo = function(userId, user) {
   user.save = _updateUser;
   user.id = userId;
   userStore.usersMap.set(userId, user);
+  return user;
 };

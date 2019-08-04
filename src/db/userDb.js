@@ -2,10 +2,8 @@ import firebase from "@firebase/app";
 import "@firebase/database";
 import "@firebase/auth";
 
-import userStore from "../stores/userStore";
-
 class UserDb {
-  createUser(user, callback) {
+  createUserWithEmail(user, callback) {
     if (!user || !user.email || !user.password) {
       throw new Error(
         `UserDb.create(): requires a user object with an email && password`
@@ -17,11 +15,10 @@ class UserDb {
       .then(res => {
         delete user.password;
         const userDataByPrivacy = {
-          publicInfo: Object.assign(_getPublicUserObject(user.email), user),
+          publicInfo: _getPublicUserObject(user),
           privateInfo: _getPrivateUserObject(),
           serverInfo: _getServerUserObject()
         };
-
         this.saveToUsersCollection(res.user.uid, userDataByPrivacy);
         userDataByPrivacy.id = res.user.uid;
         return callback(null, userDataByPrivacy);
@@ -39,42 +36,36 @@ class UserDb {
    * @param {*} userDataByPrivacy
    */
   saveToUsersCollection(uid, userDataByPrivacy) {
-    if (!uid) {
+    if (!uid || !userDataByPrivacy) {
       return;
     }
-
-    let firebaseUpdatePromise = null;
-    ["publicInfo", "privateInfo", "serverInfo"].forEach(privacy => {
-      const data = userDataByPrivacy[privacy];
-      if (data) {
-        let prom = firebase
-          .database()
-          .ref("/users/" + privacy)
-          .child(uid)
-          .update(data);
-        firebaseUpdatePromise =
-          privacy === "publicInfo" ? prom : firebaseUpdatePromise;
-      }
-    });
-    return firebaseUpdatePromise;
+    return firebase
+      .database()
+      .ref(`/users/${uid}`)
+      .update(userDataByPrivacy);
   }
 
   listenToCurrentUser(callback) {
     const db = firebase.database();
     firebase.auth().onAuthStateChanged(userAuth => {
       if (userAuth) {
-        const userRef = db.ref("users/publicInfo/" + userAuth.uid);
+        const userRef = db.ref(`users/${userAuth.uid}/publicInfo`);
         userRef.once("value").then(snap => {
           const userData = snap.val();
-          if (userData) {
-            userRef.update({ lastOnline: new Date().getTime() });
+          // social login users will have {online:true, lastOnline:123} on initial creation
+          const userHasData = userData && Object.keys(userData).length > 2;
+          if (userHasData) {
+            userRef.update({
+              lastOnline: new Date().getTime(),
+              isOnline: true
+            });
             _applyListenersForCurrentUser(userAuth.uid, (err, data) => {
               if (err) return callback(err);
               data.id = userAuth.uid;
               callback(null, data);
             });
           } else if (
-            !snap.exists() &&
+            (!userHasData || !snap.exists()) &&
             userAuth.providerData &&
             userAuth.providerData[0].providerId !== "password"
           ) {
@@ -90,7 +81,7 @@ class UserDb {
   listenToUser(userId, callback) {
     firebase
       .database()
-      .ref("users/publicInfo/" + userId)
+      .ref(`users/${userId}/publicInfo`)
       .on("value", snapshot => {
         const friend = snapshot.val();
         if (!friend) {
@@ -108,8 +99,8 @@ class UserDb {
       res => {
         callback(null, res);
         const { uid } = res.user;
-        db.ref("users/publicInfo")
-          .child(uid)
+        db.ref("users/" + uid)
+          .child("publicInfo")
           .update({
             isOnline: true
           });
@@ -133,9 +124,9 @@ class UserDb {
     auth.signOut();
     firebase
       .database()
-      .ref("users/publicInfo")
-      .child(user.id)
-      .update({ isOnline: false });
+      .ref("users/" + user.id)
+      .child("publicInfo")
+      .update({ isOnline: false, lastOnline: new Date().getTime() });
   }
 
   /**
@@ -146,37 +137,17 @@ class UserDb {
     return firebase.auth().currentUser.getToken(/* forceRefresh */ true);
   }
 
-  usersLoaded = false;
-  loadUserData = () => {
-    this.usersLoaded = true;
-    firebase
-      .database()
-      .ref("users/publicInfo")
-      .once("value")
-      .then(snap => {
-        let userData = snap.val();
-        userData &&
-          Object.keys(userData).forEach(uid => {
-            userStore.getUserById(uid);
-          });
-      });
-  };
-
+  /**
+   * hits the userSearch api
+   * @param {string} query
+   * @param {string} field
+   * @returns {Promise} user search result (as an object)
+   */
   searchByField(query, field) {
-    if (!this.usersLoaded) {
-      this.loadUserData();
-    }
-    if (!query) {
-      return [];
-    }
-    const users = userStore.usersMap.values();
-    let i = Array.from(users).filter(user => {
-      return (
-        user.id !== userStore.userId &&
-        (user[field] && user[field].toUpperCase().includes(query.toUpperCase()))
-      );
-    });
-    return i;
+    const rootUrl = _getApiUrl(firebase.app().options.projectId);
+    return fetch(`${rootUrl}/userSearch?query=${query}&field=${field}`).then(
+      resp => resp.json()
+    );
   }
 
   sendPasswordResetEmail(email) {
@@ -196,8 +167,8 @@ const _applyListenersForCurrentUser = function(uid, callback) {
     firebase
       .database()
       .ref("users")
-      .child(privacy)
       .child(uid)
+      .child(privacy)
       .on("value", snap => {
         let userData = snap.val();
         if (!userData) {
@@ -215,35 +186,37 @@ const _applyListenersForCurrentUser = function(uid, callback) {
   _monitorOnlineStatus();
 };
 
-const _getPublicUserObject = function(email) {
+const _getPublicUserObject = function(values = {}) {
+  //globally readable, user-writeable
   const timeNow = new Date().getTime();
-  return {
-    //globally readable, user-writeable
-    email: email,
+  const defaultValues = {
     createdAt: timeNow,
     lastOnline: timeNow,
     isOnline: true,
     iconUrl: _getRandomProfilePic()
   };
+  return Object.assign(defaultValues, values);
 };
 
-const _getPrivateUserObject = function() {
-  return {
-    //user-only-readable, user-writeable
+const _getPrivateUserObject = function(values = {}) {
+  //user-only-readable, user-writeable
+  const defaultValues = {
     conversations: {},
     friends: {},
     notificationToken: null,
     notificationsEnabled: true
   };
+  return Object.assign(defaultValues, values);
 };
 
-const _getServerUserObject = function() {
-  return {
-    //user-only-readable, server-only writeable
-    //new fields should be validated in database.rules.json
+const _getServerUserObject = function(values = {}) {
+  //user-only-readable, server-only writeable
+  //new fields should be validated in database.rules.json
+  const defaultValues = {
     walletBalance: 0,
     isAdmin: false
   };
+  return Object.assign(defaultValues, values);
 };
 
 const _monitorOnlineStatus = function() {
@@ -253,20 +226,14 @@ const _monitorOnlineStatus = function() {
   }
   const uid = currentUser.uid;
   const amOnline = firebase.database().ref("/.info/connected");
-  const userRef = firebase
-    .database()
-    .ref("/users/publicInfo/" + uid + "/isOnline");
+  const userRef = firebase.database().ref(`/users/${uid}/publicInfo`);
   amOnline.on("value", snapshot => {
     if (snapshot.val()) {
-      userRef.onDisconnect().set(false);
+      userRef.onDisconnect().update({
+        isOnline: false,
+        lastOnline: new Date().getTime()
+      });
     }
-  });
-  userRef.on("value", snapshot => {
-    window.setTimeout(() => {
-      if (firebase.auth().currentUser) {
-        userRef.set(true);
-      }
-    }, 2000);
   });
 };
 
@@ -280,17 +247,18 @@ const _createUserFromThirdPartyAuth = function(authInfo, callback) {
     firstName,
     lastName,
     email: mainProviderInfo.email,
-    phoneNumber: mainProviderInfo.phoneNumber,
     iconUrl: mainProviderInfo.photoURL,
-    providerId: mainProviderInfo.providerId,
-    providerUid: mainProviderInfo.uid,
     createdAt: timeNow,
     lastOnline: timeNow,
     isOnline: true
   };
   const userDataByPrivacy = {
     publicInfo,
-    privateInfo: _getPrivateUserObject(),
+    privateInfo: _getPrivateUserObject({
+      providerId: mainProviderInfo.providerId,
+      providerUid: mainProviderInfo.uid,
+      phoneNumber: mainProviderInfo.phoneNumber
+    }),
     serverInfo: _getServerUserObject()
   };
 
@@ -319,3 +287,5 @@ const _getRandomProfilePic = function() {
 
   return profilePics[Math.floor(Math.random() * profilePics.length)];
 };
+
+const _getApiUrl = projId => `https://us-central1-${projId}.cloudfunctions.net`;

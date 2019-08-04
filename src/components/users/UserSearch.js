@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { observer } from "mobx-react";
-import { View, Keyboard } from "react-native";
-import { Icon, FormInput } from "react-native-elements";
+import { Keyboard } from "react-native";
+import { FormInput } from "react-native-elements";
 
-import userDb from "../../db/userDb";
+import userStore from "../../stores/userStore";
 import nav from "../../helpers/navigatorHelper";
 import { Screen } from "../reusable";
 import UserList from "../users/UserList";
@@ -14,9 +13,18 @@ export default class UserSearch extends Component {
     results: []
   };
 
-  handleQuery = query => {
-    let results = userDb.searchByField(query, "displayName");
-    this.setState({ results, query });
+  searchForUsers = async query => {
+    try {
+      const results = await userStore.searchByField(query, "email");
+      this.setState({ results, isLoading: false });
+    } catch (error) {
+      if (error.message.includes("Failed to fetch")) {
+        return prompt(
+          "Install the user search feature first!\nIn the console, execute:",
+          "combust install user-search"
+        );
+      }
+    }
   };
 
   render() {
@@ -24,7 +32,7 @@ export default class UserSearch extends Component {
       <Screen title="Find Users" noPadding>
         <FormInput
           placeholder="Search for users.."
-          onChangeText={this.handleQuery}
+          onChangeText={this.searchForUsers}
           onSubmitEditing={Keyboard.dismiss}
           value={this.state.query}
           autoFocus
