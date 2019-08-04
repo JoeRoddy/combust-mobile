@@ -76,7 +76,8 @@ export default observer(Login);
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
+    marginHorizontal: 15
   },
   login: {
     marginTop: 30

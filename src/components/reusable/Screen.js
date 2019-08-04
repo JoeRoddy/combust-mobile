@@ -14,7 +14,7 @@ export default (Screen = ({
   return (
     <View style={containerStyle}>
       <Header title={title} />
-      <View style={[{ padding: noPadding ? 0 : 10 }, style]}>{children}</View>
+      <View style={[{ padding: noPadding ? 0 : 20 }, style]}>{children}</View>
     </View>
   );
 });

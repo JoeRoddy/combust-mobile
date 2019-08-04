@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Keyboard, Image } from "react-native";
-import { FormInput, Text, CheckBox } from "react-native-elements";
+import { Input, Text, CheckBox } from "react-native-elements";
 
 import { Button, TextArea } from "../reusable";
 import { colors } from "../../assets/styles/AppStyles";
@@ -79,15 +79,17 @@ export default class Form extends Component {
             {title}
           </Text>
         )}
-        {fields &&
-          Object.keys(fields).map((field, i) => (
-            <RenderInputFieldForDataType
-              key={i}
-              that={this}
-              dataType={fields[field]}
-              fieldName={field}
-            />
-          ))}
+        <View style={styles.inputsContainer}>
+          {fields &&
+            Object.keys(fields).map((field, i) => (
+              <RenderInputFieldForDataType
+                key={i}
+                that={this}
+                dataType={fields[field]}
+                fieldName={field}
+              />
+            ))}
+        </View>
         <Button
           success
           title={submitText || "Submit"}
@@ -122,7 +124,7 @@ const RenderInputFieldForDataType = props => {
 };
 
 const RenderStringInput = ({ fieldName, that }) => (
-  <FormInput
+  <Input
     placeholder={prettyCase(fieldName)}
     onChangeText={newVal => that.setState({ [fieldName]: newVal })}
     secureTextEntry={fieldName.toLowerCase() === "password"}
@@ -195,6 +197,9 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     textAlign: "left",
     marginLeft: 20
+  },
+  inputsContainer: {
+    marginVertical: 5
   }
 });
 

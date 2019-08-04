@@ -68,7 +68,8 @@ export default observer(Register);
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
+    marginHorizontal: 15
   },
   appName: {
     color: colors.primary,

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Keyboard } from "react-native";
-import { FormInput } from "react-native-elements";
+import { Keyboard, StyleSheet } from "react-native";
+import { Input } from "react-native-elements";
 
 import userStore from "../../stores/userStore";
 import nav from "../../helpers/navigatorHelper";
@@ -11,6 +11,10 @@ export default class UserSearch extends Component {
   state = {
     query: "",
     results: []
+  };
+
+  handleInput = query => {
+    this.setState({ query }, () => this.searchForUsers(query));
   };
 
   searchForUsers = async query => {
@@ -30,11 +34,15 @@ export default class UserSearch extends Component {
   render() {
     return (
       <Screen title="Find Users" noPadding>
-        <FormInput
+        <Input
+          containerStyle={{ paddingHorizontal: 0 }}
+          inputStyle={styles.horizPad}
+          rightIconContainerStyle={styles.horizPad}
           placeholder="Search for users.."
-          onChangeText={this.searchForUsers}
+          onChangeText={this.handleInput}
           onSubmitEditing={Keyboard.dismiss}
           value={this.state.query}
+          rightIcon={{ name: "search", color: "grey" }}
           autoFocus
         />
         <UserList
@@ -49,3 +57,7 @@ export default class UserSearch extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  horizPad: { paddingHorizontal: 10 }
+});

@@ -16,10 +16,9 @@ export default (Button = props => {
       {...props}
       raised={true}
       title={props.children || props.title}
-      backgroundColor={backgroundColor}
       borderRadius={BORDER_RADIUS}
-      containerViewStyle={[styles.containerViewStyle, props.containerViewStyle]}
-      buttonStyle={[styles.buttonStyle, props.buttonStyle]}
+      containerStyle={[styles.containerStyle, props.containerStyle]}
+      buttonStyle={[styles.buttonStyle, props.buttonStyle, { backgroundColor }]}
       textStyle={[styles.textStyle, props.textStyle]}
     />
   );
@@ -41,7 +40,7 @@ const styles = StyleSheet.create({
   //default button styles here
   buttonStyle: {},
   textStyle: {},
-  containerViewStyle: { borderRadius: BORDER_RADIUS }
+  containerStyle: { borderRadius: BORDER_RADIUS, margin: 8 }
 });
 
 const _getBackgroundColor = props => {

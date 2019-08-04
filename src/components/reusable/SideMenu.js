@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { View, StyleSheet, Text } from "react-native";
-import { List, ListItem } from "react-native-elements";
+import { ListItem } from "react-native-elements";
 
 import nav from "../../helpers/navigatorHelper";
 import { colors } from "../../assets/styles/AppStyles";
@@ -22,17 +22,18 @@ export default (SideMenu = observer(() => {
       ) : (
         <View style={{ paddingTop: 30 }} />
       )}
-      <List>
-        {menuItems.map((item, i) => (
-          <ListItem
-            key={i}
-            title={item.title}
-            leftIcon={{ name: item.icon, style: { fontSize: 20 } }}
-            onPress={item.onPress}
-            underlayColor="#edeff2"
-          />
-        ))}
-      </List>
+      {menuItems.map((item, i) => (
+        <ListItem
+          key={i}
+          title={item.title}
+          leftIcon={{ name: item.icon, style: { fontSize: 20 } }}
+          onPress={item.onPress}
+          underlayColor="#edeff2"
+          bottomDivider
+          topDivider
+          chevron
+        />
+      ))}
     </View>
   );
 }));
@@ -94,6 +95,7 @@ const getMenuItems = user => {
 const styles = StyleSheet.create({
   avatarRow: {
     paddingTop: 35,
+    paddingBottom: 20,
     paddingLeft: 12,
     flexDirection: "row",
     alignItems: "center"
